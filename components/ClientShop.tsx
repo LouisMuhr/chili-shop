@@ -1,17 +1,17 @@
 // components/ClientShop.tsx
 "use client";
 
-import { useCart } from "../lib/cartStore";
 import Image from "next/image";
-import { products } from "../data/products";
+import { useCart } from "@/lib/cartStore";
+import { products } from "@/data/products";
 
 export default function ClientShop() {
   const { addItem } = useCart();
 
   return (
-    <section className="py-16 px-6 bg-gradient-to-b from-orange-50 to-white">
+    <section className="py-20 px-6">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-5xl md:text-6xl font-black text-center text-[#e63946] mb-12 font-display">
+        <h2 className="text-6xl font-black text-center text-[#e63946] mb-16 font-display">
           Unsere feurigen Produkte
         </h2>
 
@@ -19,54 +19,48 @@ export default function ClientShop() {
           {products.map((p) => (
             <article
               key={p.id}
-              className="group relative bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col h-full border border-gray-100"
+              className="card group overflow-hidden transition-all duration-500 hover:shadow-red-500/20"
             >
-              {/* Bild + SHU Badge */}
-              <div className="relative aspect-[4/5] overflow-hidden bg-gray-200">
+              {/* Bild */}
+              <div className="relative aspect-[4/5] overflow-hidden bg-black">
                 <Image
-                  src={p.image || "/Roller.jpeg"}
+                  src={p.image || "/images/fallback.jpg"}
                   alt={p.name}
                   fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-700"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
                 />
-                <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg">
-                  <span className="text-sm font-bold text-gray-800">
-                    {p.hotness.toLocaleString("de-DE")} SHU
-                  </span>
+                {/* SHU Badge */}
+                <div className="absolute top-4 left-4 badge">
+                  {(p.hotness ?? 0).toLocaleString("de-DE")} SHU
                 </div>
               </div>
 
               {/* Inhalt */}
-              <div className="p-6 flex flex-col flex-grow">
-                <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
+              <div className="p-8 text-center">
+                <h3 className="text-2xl font-bold text-white mb-3 font-display line-clamp-2">
                   {p.name}
                 </h3>
 
-                {/* Schärfegrad Chilis */}
-                <div className="flex gap-1 mb-6">
+                {/* Schärfe-Skala */}
+                <div className="flex justify-center gap-2 my-6">
                   {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-lg">
-                      {i < (p.spiciness ?? 0) ? "Chili" : "Chili"}
+                    <span key={i} className={i < (p.spiciness ?? 0) ? "text-[#e63946]" : "text-gray-700"}>
+                      Chili
                     </span>
                   ))}
                 </div>
 
-                {/* Preis + Button in einer Zeile */}
-                <div className="mt-auto flex items-center justify-between gap-4">
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-3xl font-black text-[#e63946]">
-                      {p.price.toFixed(2)}
-                    </span>
-                    <span className="text-xl text-gray-600">€</span>
-                  </div>
-
+                {/* Preis + Button */}
+                <div className="flex items-center justify-between mt-8">
+                  <p className="text-4xl font-black text-[#e63946]">
+                    {p.price.toFixed(2)}€
+                  </p>
                   <button
-                    onClick={() =>
-                      addItem({ id: p.id, name: p.name, price: p.price })
-                    }
-                    className="px-6 py-3 bg-gradient-to-r from-[#e63946] to-[#c1121f] text-white font-bold rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 whitespace-nowrap"
+                    onClick={() => addItem({ id: p.id, name: p.name, price: p.price })}
+                    className="btn-primary"
                   >
-                    Warenkorb
+                    In den Warenkorb
                   </button>
                 </div>
               </div>
