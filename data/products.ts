@@ -1,59 +1,18 @@
-// data/products.ts  (oder src/data/products.ts – je nach deiner Struktur)
+// data/products.ts
+import { readFile } from "fs/promises";
+import path from "path";
 
 export type Product = {
   id: string;
   name: string;
   price: number;
-  image: string;
-  description: string;
-  hotness: number;      // ← jetzt Zahl, kein String mehr!
-  spiciness: number;    // ← 1 bis 5
+  hotness: number;
+  spiciness: number;
+  image?: string;
 };
 
-export const products = [
-  {
-    id: "1",
-    name: "Carolina Reaper Pulver",
-    price: 19.99,
-    image: "/images/Roller.jpeg",
-    description: "Die schärfste Chili der Welt als Pulver",
-    hotness: 2_200_000,   // ← echte Zahl → 2.200.000 SHU
-    spiciness: 5,
-  },
-  {
-    id: "2",
-    name: "Habanero Chili-Sauce",
-    price: 12.99,
-    image: "/images/chiliTest.jpg",
-    description: "Fruchtig-scharfe Sauce",
-    hotness: 200_000,
-    spiciness: 4,
-  },
-  {
-    id: "3",
-    name: "Jalapeño mild",
-    price: 8.99,
-    image: "/images/chiliTest.jpg",
-    description: "Perfekt für Einsteiger",
-    hotness: 5_000,
-    spiciness: 2,
-  },
-  {
-    id: "4",
-    name: "Jalapeño Leon",
-    price: 6.99,
-    image: "/images/chiliTest.jpg",
-    description: "Perfekt für Einsteiger",
-    hotness: 5_000,
-    spiciness: 2,
-  },
-  {
-    id: "5",
-    name: "Orange Kind",
-    price: 6.99,
-    image: "/images/chiliTest.jpg",
-    description: "Perfekt für Einsteiger",
-    hotness: 5_000,
-    spiciness: 2,
-  },
-] as const;
+export async function getProducts(): Promise<Product[]> {
+  const filePath = path.join(process.cwd(), "public", "data", "products.json");
+  const json = await readFile(filePath, "utf-8").catch(() => "[]");
+  return JSON.parse(json);
+}

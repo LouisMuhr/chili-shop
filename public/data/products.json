@@ -1,0 +1,51 @@
+[
+  {
+    "id": "1764514760884",
+    "name": "Neues Produkt",
+    "price": 19.99,
+    "hotness": 100000,
+    "spiciness": 3
+  },
+  {
+    "id": "1764515205079",
+    "name": "Neues Produkt1",
+    "price": 19.99,
+    "hotness": 100000,
+    "spiciness": 3
+  },
+  {
+    "id": "1764515207236",
+    "name": "Neues Produkt2",
+    "price": 19.99,
+    "hotness": 100000,
+    "spiciness": 3
+  },
+  {
+    "id": "1764515208366",
+    "name": "Neues Produkt3",
+    "price": 19.99,
+    "hotness": 100000,
+    "spiciness": 3
+  },
+  {
+    "id": "1764515226596",
+    "name": "Neues Produkt",
+    "price": 19.99,
+    "hotness": 100000,
+    "spiciness": 3
+  },
+  {
+    "id": "1764515227158",
+    "name": "Neues Produkt",
+    "price": 19.99,
+    "hotness": 100000,
+    "spiciness": 3
+  },
+  {
+    "id": "1764515227313",
+    "name": "Neues Produkt",
+    "price": 19.99,
+    "hotness": 100000,
+    "spiciness": 3
+  }
+]
