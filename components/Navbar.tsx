@@ -12,7 +12,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center">
-          <h1 className="text-3xl font-black text-[#e63946]">Chili Inferno</h1>
+          <h1 className="text-3xl font-black text-[#e63946]">Zizu peppers</h1>
         </Link>
 
         {/* Warenkorb Button */}
