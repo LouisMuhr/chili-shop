@@ -14,7 +14,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: white;
     --foreground: #ededed;
     --color-text:      #ffffff;
     --color-primary:   #e63946;
@@ -34,7 +34,7 @@ body {
 }
 
 .card {
-  @apply bg-[gray] border border-gray-900 rounded-3xl shadow-2xl;
+  @apply bg-[black] border border-gray-900 rounded-3xl shadow-2xl;
 }
 
 /* Custom Scrollbar */
