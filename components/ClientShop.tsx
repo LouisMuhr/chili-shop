@@ -58,7 +58,7 @@ export default function ClientShop() {
   }
 
   return (
-    <section className="py-24 px-6 bg-black">
+    <section className="py-12 px-6 bg-black">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
           {products.map((p) => (
@@ -67,7 +67,7 @@ export default function ClientShop() {
               className="group relative bg-gradient-to-b from-[#111111] to-black rounded-3xl overflow-hidden border border-gray-900 shadow-2xl hover:border-[#e63946]/60 transition-all duration-500 hover:shadow-[#e63946]/30 hover:-translate-y-3 flex flex-col"
             >
               {/* Bild + SHU Badge */}
-              <div className="relative aspect-[4/5] bg-black overflow-hidden">
+              <div className="relative aspect-[5/6] bg-black overflow-hidden">
                 <Image
                   src={p.image || "/images/fallback.jpg"}
                   alt={p.name}
@@ -83,7 +83,7 @@ export default function ClientShop() {
               {/* Inhalt – flex-grow sorgt für gleiche Höhe */}
               <div className="flex-1 p-10 flex flex-col justify-between">
                 <div className="text-center space-y-8">
-                  <h3 className="text-3xl md:text-4xl font-black text-white font-display leading-tight min-h-24 flex items-center justify-center">
+                  <h3 className="text-3xl md:text-2xl font-black text-white font-display leading-tight min-h-6 flex items-center justify-center">
                     {p.name}
                   </h3>
 

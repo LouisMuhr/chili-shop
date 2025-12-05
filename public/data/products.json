@@ -1,1 +1,26 @@
-[]
+[
+  {
+    "id": "1764925182553",
+    "name": "Neues Produkt",
+    "price": 19.99,
+    "hotness": 100000,
+    "spiciness": 3,
+    "image": "/images/1764925185009-chili.jpeg"
+  },
+  {
+    "id": "1764927183953",
+    "name": "Neues Produkt",
+    "price": 19.99,
+    "hotness": 100000,
+    "spiciness": 3,
+    "image": "/images/1764927187228-WhatsApp Image 2025-10-17 at 10.41.53.jpeg"
+  },
+  {
+    "id": "1764927575531",
+    "name": "Neues Produkt",
+    "price": 19.99,
+    "hotness": 100000,
+    "spiciness": 3,
+    "image": "/images/1764927578570-WhatsApp Image 2025-10-17 at 10.41.54.jpeg"
+  }
+]

@@ -9,7 +9,7 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 bg-white shadow-md">
-      <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center">
           <h1 className="text-3xl font-black text-[#e63946]">Zizu peppers</h1>
