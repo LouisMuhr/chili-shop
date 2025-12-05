@@ -1,4 +1,3 @@
-// app/admin/page.tsx
 import AdminPanel from "@/components/AdminPanel";
 import AdminAuth from "@/components/AdminAuth";
 
