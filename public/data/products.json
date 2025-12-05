@@ -5,7 +5,8 @@
     "price": 19.99,
     "hotness": 100000,
     "spiciness": 3,
-    "image": "/images/1764925185009-chili.jpeg"
+    "image": "/images/1764925185009-chili.jpeg",
+    "discountPercent": 20
   },
   {
     "id": "1764927183953",

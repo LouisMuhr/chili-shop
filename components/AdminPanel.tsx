@@ -1,4 +1,4 @@
-// components/AdminPanel.tsx ← KOMPLETT ERSETZEN
+// components/AdminPanel.tsx ← KOMPLETT ERSETZEN (nur das!)
 
 "use client";
 
@@ -12,6 +12,7 @@ type Product = {
   hotness: number;
   spiciness: number;
   image?: string;
+  discountPercent?: number; // ← NEU: Rabatt in Prozent
 };
 
 export default function AdminPanel() {
@@ -49,6 +50,7 @@ export default function AdminPanel() {
         price: 19.99,
         hotness: 100000,
         spiciness: 3,
+        discountPercent: 0, // ← Standardwert
       },
     ]);
   };
@@ -95,14 +97,14 @@ export default function AdminPanel() {
         </div>
       </div>
 
-      {/* Kompakte Cards – alles auf eine Seite */}
+      {/* Kompakte Cards */}
       <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
         {products.map((p, i) => (
           <div
             key={p.id}
             className="bg-gray-800 rounded-2xl p-6 border border-gray-700 shadow-xl"
           >
-            {/* Bild – kompakt */}
+            {/* Bild */}
             <div className="mb-6">
               {p.image ? (
                 <div className="relative h-48 rounded-xl overflow-hidden border-2 border-dashed border-gray-600">
@@ -145,6 +147,7 @@ export default function AdminPanel() {
               className="w-full text-xl font-bold bg-transparent border-b border-gray-600 focus:border-red-500 focus:outline-none mb-4"
             />
 
+            {/* Preis + Rabatt */}
             <div className="grid grid-cols-2 gap-4 my-6">
               <div>
                 <label className="text-gray-400 text-xs">Preis €</label>
@@ -159,18 +162,35 @@ export default function AdminPanel() {
                 />
               </div>
               <div>
-                <label className="text-gray-400 text-xs">SHU</label>
+                <label className="text-gray-400 text-xs">Rabatt %</label>
                 <input
                   type="number"
-                  value={p.hotness}
+                  min="0"
+                  max="100"
+                  value={p.discountPercent ?? 0}
                   onChange={(e) =>
-                    updateProduct(i, "hotness", parseInt(e.target.value) || 0)
+                    updateProduct(i, "discountPercent", parseInt(e.target.value) || 0)
                   }
                   className="w-full bg-gray-700 px-3 py-2 rounded text-sm mt-1"
+                  placeholder="0"
                 />
               </div>
             </div>
 
+            {/* SHU */}
+            <div className="my-6">
+              <label className="text-gray-400 text-xs">SHU</label>
+              <input
+                type="number"
+                value={p.hotness}
+                onChange={(e) =>
+                  updateProduct(i, "hotness", parseInt(e.target.value) || 0)
+                }
+                className="w-full bg-gray-700 px-3 py-2 rounded text-sm mt-1"
+              />
+            </div>
+
+            {/* Schärfe */}
             <div className="my-6">
               <label className="text-gray-400 text-xs block mb-2">
                 Schärfe

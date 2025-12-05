@@ -1,4 +1,4 @@
-// components/ClientShop.tsx
+// components/ClientShop.tsx  ← KOMPLETT ERSETZEN – Copy & Paste!
 
 "use client";
 
@@ -13,6 +13,7 @@ type Product = {
   hotness: number;
   spiciness: number;
   image?: string;
+  discountPercent?: number; // ← bleibt optional!
 };
 
 export default function ClientShop() {
@@ -61,65 +62,84 @@ export default function ClientShop() {
     <section className="py-12 px-6 bg-black">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
-          {products.map((p) => (
-            <article
-              key={p.id}
-              className="group relative bg-gradient-to-b from-[#111111] to-black rounded-3xl overflow-hidden border border-gray-900 shadow-2xl hover:border-[#e63946]/60 transition-all duration-500 hover:shadow-[#e63946]/30 hover:-translate-y-3 flex flex-col"
-            >
-              {/* Bild + SHU Badge */}
-              <div className="relative aspect-[5/6] bg-black overflow-hidden">
-                <Image
-                  src={p.image || "/images/fallback.jpg"}
-                  alt={p.name}
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  className="object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute top-6 left-6 bg-orange-500 text-black font-bold px-6 py-3 rounded-full text-base shadow-2xl border-2 border-orange-400">
-                  {p.hotness.toLocaleString("de-DE")} SHU
-                </div>
-              </div>
+          {products.map((p) => {
+            const discount = p.discountPercent ?? 0;
+            const hasDiscount = discount > 0;
+            const finalPrice = p.price * (1 - discount / 100);
 
-              {/* Inhalt – flex-grow sorgt für gleiche Höhe */}
-              <div className="flex-1 p-10 flex flex-col justify-between">
-                <div className="text-center space-y-8">
-                  <h3 className="text-3xl md:text-2xl font-black text-white font-display leading-tight min-h-6 flex items-center justify-center">
-                    {p.name}
-                  </h3>
-
-                  <div className="flex justify-center gap-4">
-                    {[...Array(5)].map((_, i) => (
-                      <span
-                        key={i}
-                        className={`text-xl transition-all ${
-                          i < p.spiciness
-                            ? "text-[#e63946] drop-shadow-glow"
-                            : "text-gray-700"
-                        }`}
-                      >
-                        Chili
-                      </span>
-                    ))}
+            return (
+              <article
+                key={p.id}
+                className="group relative bg-gradient-to-b from-[#111111] to-black rounded-3xl overflow-hidden border border-gray-900 shadow-2xl hover:border-[#e63946]/60 transition-all duration-500 hover:shadow-[#e63946]/30 hover:-translate-y-3 flex flex-col"
+              >
+                {/* Bild + SHU Badge */}
+                <div className="relative aspect-[5/6] bg-black overflow-hidden">
+                  <Image
+                    src={p.image || "/images/fallback.jpg"}
+                    alt={p.name}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  <div className="absolute top-6 left-6 bg-orange-500 text-black font-bold px-6 py-3 rounded-full text-base shadow-2xl border-2 border-orange-400">
+                    {p.hotness.toLocaleString("de-DE")} SHU
                   </div>
                 </div>
 
-                {/* Preis + Button – immer unten */}
-                <div className="flex items-center justify-between gap-6 mt-10">
-                  <span className="text-2xl font-black text-[#e63946] tracking-tighter flex-shrink-0">
-                    {p.price.toFixed(2)}€
-                  </span>
-                  <button
-                    onClick={() =>
-                      addItem({ id: p.id, name: p.name, price: p.price })
-                    }
-                    className="px-4 py-4 bg-[#e63946] hover:bg-[#c1121f] text-white font-bold text-xl rounded-2xl shadow-2xl hover:shadow-[#e63946]/60 transform hover:scale-105 transition-all duration-300 border-2 border-red-800 whitespace-nowrap flex-shrink-0"
-                  >
-                    Warenkorb
-                  </button>
+                {/* Inhalt */}
+                <div className="flex-1 p-10 flex flex-col justify-between">
+                  <div className="text-center space-y-8">
+                    <h3 className="text-3xl md:text-2xl font-black text-white font-display leading-tight min-h-6 flex items-center justify-center">
+                      {p.name}
+                    </h3>
+
+                    <div className="flex justify-center gap-4">
+                      {[...Array(5)].map((_, i) => (
+                        <span
+                          key={i}
+                          className={`text-xl transition-all ${
+                            i < p.spiciness
+                              ? "text-[#e63946] drop-shadow-glow"
+                              : "text-gray-700"
+                          }`}
+                        >
+                          Chili
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* PREIS + RABATT + BUTTON */}
+                  <div className="flex items-center justify-between gap-6 mt-10">
+                    <div className="text-left">
+                      {hasDiscount && (
+                        <span className="block text-lg text-gray-500 line-through">
+                          {p.price.toFixed(2)}€
+                        </span>
+                      )}
+                      <span className="text-2xl font-black text-[#e63946] tracking-tighter">
+                        {finalPrice.toFixed(2)}€
+                      </span>
+                      {hasDiscount && (
+                        <span className="ml-3 inline-block bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold">
+                          −{discount}%
+                        </span>
+                      )}
+                    </div>
+
+                    <button
+                      onClick={() =>
+                        addItem({ id: p.id, name: p.name, price: finalPrice })
+                      }
+                      className="px-4 py-4 bg-[#e63946] hover:bg-[#c1121f] text-white font-bold text-xl rounded-2xl shadow-2xl hover:shadow-[#e63946]/60 transform hover:scale-105 transition-all duration-300 border-2 border-red-800 whitespace-nowrap flex-shrink-0"
+                    >
+                      Warenkorb
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </article>
-          ))}
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>
