@@ -24,5 +24,32 @@
     "spiciness": 3,
     "image": "/images/1764927578570-WhatsApp Image 2025-10-17 at 10.41.54.jpeg",
     "discountPercent": 15
+  },
+  {
+    "id": "1764933464392",
+    "name": "Jalapeno Leon (orange, ultra scharf, gefährlich!!!)",
+    "price": 19.99,
+    "hotness": 1000000000000,
+    "spiciness": 5,
+    "discountPercent": 0,
+    "image": "/images/1764933472140-WhatsApp Image 2025-10-17 at 10.41.56.jpeg"
+  },
+  {
+    "id": "1764933464784",
+    "name": "Tolle neues produkt ur langeer name",
+    "price": 19.99,
+    "hotness": 100000,
+    "spiciness": 3,
+    "discountPercent": 0,
+    "image": "/images/1764933469698-WhatsApp Image 2025-10-17 at 10.41.59.jpeg"
+  },
+  {
+    "id": "1764933465218",
+    "name": "Neues Produkt",
+    "price": 19.99,
+    "hotness": 100000,
+    "spiciness": 3,
+    "discountPercent": 0,
+    "image": "/images/1764933467994-WhatsApp Image 2025-10-17 at 10.41.54.jpeg"
   }
 ]
