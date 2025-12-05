@@ -25,10 +25,8 @@ export default function AdminAuth({ children }: { children: React.ReactNode }) {
     if (password === CORRECT_PASSWORD) {
       sessionStorage.setItem("admin-auth", "true");
       setIsAuthenticated(true);
-      router.refresh(); // sorgt für sauberes Neuladen
-    } else {
-      setError(true);
-      setPassword("");
+      window.location.href = "/api/admin/dashboard";
+      return;
     }
   };
 
