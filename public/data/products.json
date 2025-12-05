@@ -6,7 +6,7 @@
     "hotness": 100000,
     "spiciness": 3,
     "image": "/images/1764925185009-chili.jpeg",
-    "discountPercent": 20
+    "discountPercent": 50
   },
   {
     "id": "1764927183953",
@@ -22,6 +22,7 @@
     "price": 19.99,
     "hotness": 100000,
     "spiciness": 3,
-    "image": "/images/1764927578570-WhatsApp Image 2025-10-17 at 10.41.54.jpeg"
+    "image": "/images/1764927578570-WhatsApp Image 2025-10-17 at 10.41.54.jpeg",
+    "discountPercent": 15
   }
 ]

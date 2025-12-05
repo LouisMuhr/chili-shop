@@ -1,4 +1,4 @@
-// components/ClientShop.tsx  ← KOMPLETT ERSETZEN – Copy & Paste!
+// components/ClientShop.tsx ← KOMPLETT ERSETZEN – Copy & Paste!
 
 "use client";
 
@@ -13,7 +13,7 @@ type Product = {
   hotness: number;
   spiciness: number;
   image?: string;
-  discountPercent?: number; // ← bleibt optional!
+  discountPercent?: number;
 };
 
 export default function ClientShop() {
@@ -28,35 +28,11 @@ export default function ClientShop() {
         setProducts(data);
         setLoading(false);
       })
-      .catch(() => {
-        setProducts([]);
-        setLoading(false);
-      });
+      .catch(() => setLoading(false));
   }, []);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <p className="text-4xl font-black text-[#e63946]">Lade Produkte...</p>
-      </div>
-    );
-  }
-
-  if (products.length === 0) {
-    return (
-      <div className="min-h-screen bg-black flex items-center justify-center text-center px-6">
-        <div>
-          <p className="text-4xl font-bold text-gray-500 mb-4">
-            Noch keine Produkte
-          </p>
-          <p className="text-xl text-gray-400">
-            Gehe zu <span className="text-[#e63946] font-bold">/admin</span> und
-            füge welche hinzu!
-          </p>
-        </div>
-      </div>
-    );
-  }
+  if (loading) return <div className="text-center py-32 text-4xl text-[#e63946]">Lade Produkte...</div>;
+  if (products.length === 0) return <div className="text-center py-32 text-3xl text-gray-500">Noch keine Produkte</div>;
 
   return (
     <section className="py-12 px-6 bg-black">
@@ -72,7 +48,7 @@ export default function ClientShop() {
                 key={p.id}
                 className="group relative bg-gradient-to-b from-[#111111] to-black rounded-3xl overflow-hidden border border-gray-900 shadow-2xl hover:border-[#e63946]/60 transition-all duration-500 hover:shadow-[#e63946]/30 hover:-translate-y-3 flex flex-col"
               >
-                {/* Bild + SHU Badge */}
+                {/* Bild */}
                 <div className="relative aspect-[5/6] bg-black overflow-hidden">
                   <Image
                     src={p.image || "/images/fallback.jpg"}
@@ -81,9 +57,18 @@ export default function ClientShop() {
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover transition-transform duration-700 group-hover:scale-110"
                   />
-                  <div className="absolute top-6 left-6 bg-orange-500 text-black font-bold px-6 py-3 rounded-full text-base shadow-2xl border-2 border-orange-400">
+
+                  {/* SHU Badge – kleiner, links oben */}
+                  <div className="absolute top-4 left-4 bg-orange-500 text-black font-bold px-4 py-2 rounded-full text-xs shadow-xl border border-orange-400">
                     {p.hotness.toLocaleString("de-DE")} SHU
                   </div>
+
+                  {/* Rabatt Badge – fett rechts oben */}
+                  {hasDiscount && (
+                    <div className="absolute top-4 right-4 bg-red-600 text-white font-black px-5 py-3 rounded-2xl text-lg shadow-2xl border-2 border-red-700 transform rotate-6">
+                      −{discount}%
+                    </div>
+                  )}
                 </div>
 
                 {/* Inhalt */}
@@ -109,7 +94,7 @@ export default function ClientShop() {
                     </div>
                   </div>
 
-                  {/* PREIS + RABATT + BUTTON */}
+                  {/* Preis + Button – sauber unten */}
                   <div className="flex items-center justify-between gap-6 mt-10">
                     <div className="text-left">
                       {hasDiscount && (
@@ -120,11 +105,6 @@ export default function ClientShop() {
                       <span className="text-2xl font-black text-[#e63946] tracking-tighter">
                         {finalPrice.toFixed(2)}€
                       </span>
-                      {hasDiscount && (
-                        <span className="ml-3 inline-block bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold">
-                          −{discount}%
-                        </span>
-                      )}
                     </div>
 
                     <button
