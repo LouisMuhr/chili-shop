@@ -1,50 +1,81 @@
-// components/Navbar.tsx  ← KOMPLETT ERSETZEN (Copy & Paste)
+// components/Navbar.tsx
 
 "use client";
 
 import Link from "next/link";
-import { useCart } from "../lib/cartStore";
+import { usePathname } from "next/navigation";
+import { ShoppingCart } from "lucide-react";
+import { useCart } from "@/lib/cartStore";
 
 export default function Navbar() {
-  const totalItems = useCart((state) => state.getTotalItems());
+  const pathname = usePathname();
+  const { items } = useCart();
+  const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
-    <header className="sticky top-0 z-50 bg-white shadow-md">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        {/* Logo */}
-        <Link href="/" className="flex items-center">
-          <h1 className="text-3xl font-black text-[#e63946]">Zizu peppers</h1>
-        </Link>
+    <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4">
+      <div className="max-w-7xl mx-auto">
+        {/* Glassmorphism Container */}
+        <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl px-8 py-4 shadow-2xl">
+          <div className="flex items-center justify-between">
+            
+            {/* Logo */}
+            <Link href="/" className="group">
+              <h1 className="text-3xl font-black tracking-tighter">
+                <span className="bg-gradient-to-r from-red-500 via-orange-500 to-red-600 bg-clip-text text-transparent group-hover:from-red-400 group-hover:to-orange-500 transition-all duration-300">
+                  Zizu
+                </span>
+                <span className="text-white group-hover:text-gray-200 transition-colors duration-300">
+                  Peppers
+                </span>
+              </h1>
+            </Link>
 
-        {/* Rechte Seite: Admin-Link + Warenkorb */}
-        <div className="flex items-center gap-6">
-          {/* Temporärer Admin-Button – klein, dezent, nur für dich */}
-          <Link
-            href="/admin"
-            className="text-xs text-gray-400 hover:text-gray-600 font-medium uppercase tracking-wider transition"
-          >
-            [admin]
-          </Link>
+            {/* Navigation Links */}
+            <div className="flex items-center gap-8">
+              <Link 
+                href="/admin"
+                className={`text-lg font-semibold transition-all duration-300 ${
+                  pathname === '/shop' 
+                    ? 'text-red-500' 
+                    : 'text-gray-400 hover:text-white'
+                }`}
+              >
+                Shop
+              </Link>
+              
+              <Link 
+                href="/about"
+                className={`text-lg font-semibold transition-all duration-300 ${
+                  pathname === '/about' 
+                    ? 'text-red-500' 
+                    : 'text-gray-400 hover:text-white'
+                }`}
+              >
+                Über uns
+              </Link>
 
-          {/* Warenkorb Button – bleibt 100 % wie vorher */}
-          <Link
-            href="/cart"
-            className="relative px-8 py-4 bg-gradient-to-r from-[#e63946] to-[#c1121f] text-white font-bold rounded-2xl shadow-2xl hover:shadow-red-500/50 hover:-translate-y-1 transition-all duration-300 overflow-hidden"
-          >
-            <span className="relative z-10 flex items-center gap-3">
-              Warenkorb
-            </span>
-
-            {totalItems > 0 && (
-              <span className="absolute -top-3 -right-3 bg-[#f4a261] text-black font-black text-sm rounded-full size-9 flex items-center justify-center shadow-lg">
-                {totalItems}
-              </span>
-            )}
-
-            <div className="absolute inset-0 bg-white/20 -translate-y-full transition-transform duration-500 hover:translate-y-0" />
-          </Link>
+              {/* Cart Button */}
+              <Link 
+                href="/cart"
+                className="relative group"
+              >
+                <div className="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 text-white font-bold rounded-xl shadow-lg hover:shadow-red-600/50 transition-all duration-300 transform hover:scale-105">
+                  <ShoppingCart className="w-5 h-5" />
+                  <span>Warenkorb</span>
+                  
+                  {/* Item Count Badge */}
+                  {itemCount > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-white text-red-600 text-xs font-black w-6 h-6 rounded-full flex items-center justify-center shadow-lg border-2 border-red-600">
+                      {itemCount}
+                    </span>
+                  )}
+                </div>
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
-    </header>
+    </nav>
   );
 }
