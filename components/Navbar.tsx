@@ -39,7 +39,7 @@ export default function Navbar() {
                 <Link 
                   href="/admin"
                   className={`text-lg font-semibold transition-all duration-300 ${
-                    pathname === '/admin' 
+                    pathname === 'api/admin' 
                       ? 'text-red-500' 
                       : 'text-gray-400 hover:text-white'
                   }`}
