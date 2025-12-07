@@ -19,6 +19,7 @@ export default function AdminPanel() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [hasMounted, setHasMounted] = useState(false);
+  const [toast, setToast] = useState(false);
 
   useEffect(() => setHasMounted(true), []);
   useEffect(() => {
@@ -38,7 +39,9 @@ export default function AdminPanel() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(products),
     });
-    alert("Gespeichert!");
+
+    setToast(true);
+    setTimeout(() => setToast(false), 960); // verschwindet nach 2 Sekunden
   };
 
   const addProduct = () => {
@@ -96,6 +99,28 @@ export default function AdminPanel() {
           </button>
         </div>
       </div>
+
+      {/* Schöner Toast */}
+      {toast && (
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 animate-in fade-in zoom-in-95 duration-300">
+          <div className="bg-green-600 text-white px-5 py-2.5 rounded-full font-bold text-sm shadow-2xl border border-green-400 flex items-center gap-2">
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={3}
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+            Save
+          </div>
+        </div>
+      )}
 
       {/* Kompakte Cards */}
       <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
@@ -169,7 +194,11 @@ export default function AdminPanel() {
                   max="100"
                   value={p.discountPercent ?? 0}
                   onChange={(e) =>
-                    updateProduct(i, "discountPercent", parseInt(e.target.value) || 0)
+                    updateProduct(
+                      i,
+                      "discountPercent",
+                      parseInt(e.target.value) || 0
+                    )
                   }
                   className="w-full bg-gray-700 px-3 py-2 rounded text-sm mt-1"
                   placeholder="0"
