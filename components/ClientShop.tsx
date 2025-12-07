@@ -49,7 +49,9 @@ export default function ClientShop() {
       <div className="min-h-screen bg-gradient-to-br from-slate-950 via-neutral-900 to-stone-950 flex items-center justify-center relative overflow-hidden">
         <div className="text-center relative z-10">
           <div className="text-6xl mb-4 animate-pulse">Chili</div>
-          <div className="text-4xl text-[#e63946] font-black animate-pulse">Lade Produkte...</div>
+          <div className="text-4xl text-[#e63946] font-black animate-pulse">
+            Lade Produkte...
+          </div>
         </div>
       </div>
     );
@@ -72,7 +74,9 @@ export default function ClientShop() {
       <section className="relative z-10 py-16 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="mb-16 text-center">
-            <h2 className="text-5xl md:text-6xl font-black text-white mb-4 tracking-tight drop-shadow-lg">Unsere Chilis</h2>
+            <h2 className="text-5xl md:text-6xl font-black text-white mb-4 tracking-tight drop-shadow-lg">
+              Unsere Chilis
+            </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-transparent via-red-600 to-transparent mx-auto shadow-lg"></div>
           </div>
 
@@ -112,9 +116,16 @@ export default function ClientShop() {
                       <h3 className="text-3xl md:text-2xl font-black text-white font-display leading-tight min-h-6 flex items-center justify-center">
                         {p.name}
                       </h3>
-                      <div className="flex justify-center gap-4">
+                      <div className="flex gap-2">
                         {[...Array(5)].map((_, i) => (
-                          <span key={i} className={`text-xl ${i < p.spiciness ? "text-[#e63946]" : "text-gray-700"}`}>Chili</span>
+                          <span
+                            key={i}
+                            className={`text-lg transition-opacity ${
+                              i < p.spiciness ? "opacity-100" : "opacity-20"
+                            }`}
+                          >
+                            🌶️
+                          </span>
                         ))}
                       </div>
                     </div>
@@ -129,7 +140,11 @@ export default function ClientShop() {
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          addItem({ id: p.id, name: p.name, price: finalPrice });
+                          addItem({
+                            id: p.id,
+                            name: p.name,
+                            price: finalPrice,
+                          });
                           showToast(); // ← EINMALIG!
                         }}
                         className="w-full px-6 py-4 bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 text-white font-bold text-lg rounded-xl shadow-lg hover:shadow-red-600/50 transition-all duration-300 transform hover:scale-105"
