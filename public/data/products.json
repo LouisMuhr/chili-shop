@@ -24,29 +24,5 @@
     "spiciness": 3,
     "image": "/images/1764927578570-WhatsApp Image 2025-10-17 at 10.41.54.jpeg",
     "discountPercent": 15
-  },
-  {
-    "id": "1765111488890",
-    "name": "Neues Produkt",
-    "price": 19.99,
-    "hotness": 100000,
-    "spiciness": 3,
-    "discountPercent": 0
-  },
-  {
-    "id": "1765111490255",
-    "name": "Neues Produkt",
-    "price": 19.99,
-    "hotness": 100000,
-    "spiciness": 3,
-    "discountPercent": 0
-  },
-  {
-    "id": "1765111490681",
-    "name": "Neues Produkt",
-    "price": 19.99,
-    "hotness": 100000,
-    "spiciness": 3,
-    "discountPercent": 0
   }
 ]
