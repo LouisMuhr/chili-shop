@@ -100,9 +100,12 @@ export default function ClientCart() {
                 >
                   Weiter einkaufen
                 </Link>
-                <button className="py-5 bg-gradient-to-r from-[#e63946] to-[#c1121f] hover:from-[#c1121f] hover:to-[#9b0f1a] rounded-2xl font-black text-xl shadow-2xl transform hover:-translate-y-1 transition-all duration-300 border-2 border-red-900">
+                <Link 
+                href="/checkout"
+                className="text-center py-5 bg-gradient-to-r from-[#e63946] to-[#c1121f] hover:from-[#c1121f] hover:to-[#9b0f1a] rounded-2xl font-black text-xl shadow-2xl transform hover:-translate-y-1 transition-all duration-300 border-2 border-red-900"
+                >
                   Zur Kasse →
-                </button>
+                </Link>
               </div>
             </div>
           </div>
