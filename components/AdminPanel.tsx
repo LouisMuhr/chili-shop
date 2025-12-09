@@ -24,7 +24,7 @@ export default function AdminPanel() {
   useEffect(() => setHasMounted(true), []);
   useEffect(() => {
     if (!hasMounted) return;
-    fetch("/api/admin/products")
+    fetch("/admin/products")
       .then((r) => r.json())
       .then((data) => {
         setProducts(data || []);
@@ -34,7 +34,7 @@ export default function AdminPanel() {
   }, [hasMounted]);
 
   const saveProducts = async () => {
-    await fetch("/api/admin/products", {
+    await fetch("/admin/products", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(products),
@@ -67,7 +67,7 @@ export default function AdminPanel() {
   const handleImageUpload = async (i: number, file: File) => {
     const formData = new FormData();
     formData.append("file", file);
-    const res = await fetch("/api/admin/upload", {
+    const res = await fetch("/admin/upload", {
       method: "POST",
       body: formData,
     });

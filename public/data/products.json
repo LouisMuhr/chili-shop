@@ -1,20 +1,20 @@
 [
   {
-    "id": "1765115298238",
+    "id": "1765145954066",
     "name": "Neues Produkt",
     "price": 19.99,
-    "hotness": 1000000,
-    "spiciness": 4,
-    "discountPercent": 25,
-    "image": "/images/1765115532777-chili.jpeg"
+    "hotness": 100000,
+    "spiciness": 3,
+    "discountPercent": 15,
+    "image": "/images/1765145956662-chili.jpeg"
   },
   {
-    "id": "1765116850386",
+    "id": "1765146233681",
     "name": "Neues Produkt",
     "price": 19.99,
     "hotness": 100000,
     "spiciness": 3,
     "discountPercent": 0,
-    "image": "/images/1765116852900-chili.jpeg"
+    "image": "/images/1765146236780-WhatsApp Image 2025-10-17 at 10.41.54.jpeg"
   }
 ]
