@@ -35,24 +35,34 @@ export default function AdminSelect() {
           Admin-Bereich
         </h1>
 
-        <div className="grid md:grid-cols-2 gap-10">
+        <div className="grid md:grid-cols-2 gap-10 text-center">
           <Link
             href="/admin/dashboard"
-            className="block p-12 bg-gray-900 hover:bg-gray-800 rounded-2xl border-2 border-gray-700 hover:border-red-600 transition-all duration-300 text-center transform hover:scale-105 shadow-2xl"
+            className="block p-12 bg-gray-900 hover:bg-gray-800 rounded-2xl border-2 border-gray-700 hover:border-red-600 transition-all duration-300 transform hover:scale-105 shadow-2xl"
           >
-            <h2 className="text-6xl font-bold text-white mb-3">Dashboard</h2>
-            <p className="text-gray-400">Produkte verwalten</p>
+            <h1 className="text-5xl mb-4 text-gray-600">
+              Dashboard
+            </h1>
+            <h2 className="text-xl font-bold text-gray-600 mb-3">
+              Produkte verwalten
+            </h2>
           </Link>
 
-          <div className="p-12 bg-gray-900/50 rounded-2xl border-2 border-dashed border-gray-700 text-center opacity-60">
-            <div className="text-7xl mb-4 text-gray-600">Settings</div>
-            <h2 className="text-3xl font-bold text-gray-600 mb-3">In Entwicklung</h2>
-            <p className="text-gray-600">Bald verfügbar…</p>
+          <div className="p-12 bg-gray-900/50 rounded-2xl border-2 border-dashed border-gray-700 opacity-60">
+            <h1 className="text-5xl mb-4 text-gray-600 text-balance">
+              Settings
+            </h1>
+            <h2 className="text-xl font-bold text-gray-600 mb-3">
+              In Entwicklung
+            </h2>
           </div>
         </div>
 
         <div className="mt-12 text-center">
-          <Link href="/" className="text-gray-500 hover:text-white transition text-lg">
+          <Link
+            href="/"
+            className="text-gray-500 hover:text-white transition text-lg"
+          >
             ← Zurück zum Shop
           </Link>
         </div>

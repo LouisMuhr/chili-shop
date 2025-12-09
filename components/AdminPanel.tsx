@@ -80,7 +80,7 @@ export default function AdminPanel() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black text-white py-8 px-6">
       {/* Kompakter Header */}
-      <div className="max-w-7xl mx-auto flex items-center justify-between mb-10">
+      <div className="max-w-7xl mx-auto flex items-center justify-between mb-10 pt-20 md:pt-24">
         <h1 className="text-3xl md:text-4xl font-black text-red-500 font-display">
           Admin – Produkt-Editor
         </h1>
