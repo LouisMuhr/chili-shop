@@ -67,8 +67,46 @@ export default function ClientShop() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-neutral-900 to-stone-950 relative overflow-hidden">
-      {/* Dein ganzes wunderschönes Design – bleibt unverändert */}
-      {/* ... Noise, Glow, Hero usw. wie vorher ... */}
+      {/* Hero Section */}
+      <header className="relative z-10 pt-20 pb-16 px-6">
+        <div className="max-w-7xl mx-auto text-center">
+          <div className="inline-block mb-6 px-6 py-2 bg-red-600/20 border border-red-600/30 rounded-full">
+            <span className="text-red-400 font-semibold text-sm tracking-wider uppercase">
+              🔥 Extrem scharf
+            </span>
+          </div>
+
+          <h1 className="text-7xl md:text-8xl lg:text-9xl font-black text-white mb-6 leading-none tracking-tighter">
+            <span className="bg-gradient-to-r from-red-500 via-orange-500 to-red-600 bg-clip-text text-transparent">
+              Zizu
+            </span>
+            <br />
+            <span className="text-white">Peppers</span>
+          </h1>
+
+          <p className="text-xl md:text-2xl text-gray-400 max-w-2xl mx-auto font-light leading-relaxed">
+            Die schärfsten Chilis der Welt –
+            <span className="text-red-400 font-semibold"> handverlesen</span>{" "}
+            und
+            <span className="text-orange-400 font-semibold">
+              {" "}
+              extrem scharf
+            </span>
+          </p>
+
+          <div className="mt-12 flex flex-wrap justify-center gap-4 text-sm text-gray-500">
+            <div className="px-6 py-3 bg-white/5 rounded-full border border-white/100">
+              ⚡ Schneller Versand
+            </div>
+            <div className="px-6 py-3 bg-white/5 rounded-full border border-white/100">
+              🌡️ Bis 2.2 Mio SHU
+            </div>
+            <div className="px-6 py-3 bg-white/5 rounded-full border border-white/100">
+              ✓ Premium Qualität
+            </div>
+          </div>
+        </div>
+      </header>
 
       {/* Products Grid */}
       <section className="relative z-10 py-16 px-6">
@@ -90,68 +128,74 @@ export default function ClientShop() {
                 <article
                   key={p.id}
                   onClick={() => setSelectedProduct(p)}
-                  className="group relative bg-gradient-to-b from-[#111111] to-black rounded-3xl overflow-hidden border border-gray-900 shadow-2xl hover:border-[#e63946]/60 transition-all duration-500 hover:shadow-[#e63946]/30 hover:-translate-y-3 flex flex-col cursor-pointer"
+                  className="group relative bg-white/5 backdrop-blur-md rounded-3xl overflow-hidden border border-white/10 hover:border-red-500/40 hover:bg-white/10 transition-all duration-300 hover:shadow-2xl hover:shadow-red-500/20 hover:-translate-y-2 cursor-pointer flex flex-col"
                 >
-                  {/* Bild + Badges */}
-                  <div className="relative aspect-[5/6] bg-black overflow-hidden">
+                  {/* Bild - größeres Aspect Ratio */}
+                  <div className="relative aspect-[4/5] overflow-hidden">
                     <Image
                       src={p.image || "/images/fallback.jpg"}
                       alt={p.name}
                       fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-110"
                     />
-                    <div className="absolute top-4 left-4 bg-orange-500 text-black font-bold px-4 py-2 rounded-full text-xs shadow-xl border border-orange-400">
-                      {p.hotness.toLocaleString("de-DE")} SHU
+
+                    {/* Overlay Gradient */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+
+                    {/* Info direkt auf dem Bild */}
+                    <div className="absolute bottom-0 left-0 right-0 p-6 space-y-3">
+                      <h3 className="text-2xl font-black text-white leading-tight line-clamp-2">
+                        {p.name}
+                      </h3>
+
+                      <div className="flex items-center justify-between">
+                        <div className="flex gap-2">
+                          {[...Array(5)].map((_, i) => (
+                            <span
+                              key={i}
+                              className={`text-lg transition-opacity ${
+                                i < p.spiciness ? "opacity-100" : "opacity-20"
+                              }`}
+                            >
+                              🌶️
+                            </span>
+                          ))}
+                        </div>
+                      </div>
                     </div>
+
+                    {/* Rabatt Badge - größer */}
                     {hasDiscount && (
-                      <div className="absolute top-4 right-4 bg-red-600 text-white font-black px-5 py-3 rounded-2xl text-lg shadow-2xl border-2 border-red-700 transform rotate-6">
+                      <div className="absolute top-4 right-4 bg-red-600 text-white font-black px-5 py-3 rounded-xl text-lg backdrop-blur-sm shadow-xl border-2 border-red-700 transform rotate-6">
                         −{discount}%
                       </div>
                     )}
+                    <div className="absolute top-4 left-4 bg-orange-500/90 backdrop-blur-sm text-black font-bold px-4 py-2 rounded-full text-sm shadow-xl">
+                      {p.hotness.toLocaleString("de-DE")} SHU
+                    </div>
                   </div>
 
-                  <div className="flex-1 p-10 flex flex-col justify-between">
-                    <div className="text-center space-y-8">
-                      <h3 className="text-3xl md:text-2xl font-black text-white font-display leading-tight min-h-6 flex items-center justify-center">
-                        {p.name}
-                      </h3>
-                      <div className="flex gap-2">
-                        {[...Array(5)].map((_, i) => (
-                          <span
-                            key={i}
-                            className={`text-lg transition-opacity ${
-                              i < p.spiciness ? "opacity-100" : "opacity-20"
-                            }`}
-                          >
-                            🌶️
-                          </span>
-                        ))}
-                      </div>
-                    </div>
+                  {/* Preis + Button - mehr Padding */}
+                  <div className="p-6 space-y-4">
+                    <PriceDisplay
+                      originalPrice={p.price}
+                      discountPercent={p.discountPercent}
+                      className="text-2xl font-black"
+                    />
 
-                    <div className="text-center mt-12">
-                      <PriceDisplay
-                        originalPrice={p.price}
-                        discountPercent={p.discountPercent}
-                        className="text-2xl md:text-3xl justify-center mb-6"
-                      />
-
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          addItem({
-                            id: p.id,
-                            name: p.name,
-                            price: finalPrice,
-                          });
-                          showToast(); // ← EINMALIG!
-                        }}
-                        className="w-full px-6 py-4 bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 text-white font-bold text-lg rounded-xl shadow-lg hover:shadow-red-600/50 transition-all duration-300 transform hover:scale-105"
-                      >
-                        Warenkorb
-                      </button>
-                    </div>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const finalPrice =
+                          p.price * (1 - (p.discountPercent ?? 0) / 100);
+                        addItem({ id: p.id, name: p.name, price: finalPrice });
+                        showToast();
+                      }}
+                      className="w-full px-6 py-4 bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 text-white font-bold text-lg rounded-xl shadow-lg hover:shadow-red-600/50 transition-all duration-300 transform hover:scale-105"
+                    >
+                      In den Warenkorb
+                    </button>
                   </div>
                 </article>
               );

@@ -37,9 +37,9 @@ export default function Navbar() {
               {/* Desktop Navigation */}
               <div className="hidden md:flex items-center gap-8">
                 <Link 
-                  href="/admin"
+                  href="/admin/select"
                   className={`text-lg font-semibold transition-all duration-300 ${
-                    pathname === 'api/admin' 
+                    pathname === 'admin/select' 
                       ? 'text-red-500' 
                       : 'text-gray-400 hover:text-white'
                   }`}

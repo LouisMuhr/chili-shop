@@ -1,13 +1,12 @@
+// app/admin/dashboard/page.tsx
+
+import AdminGuard from "@/components/AdminGuard";
 import AdminPanel from "@/components/AdminPanel";
-import AdminAuth from "@/components/AdminAuth";
-import PageLayout from "@/components/PageLayout";
 
-export const dynamic = "force-dynamic";
-
-export default function AdminDashboard() {
+export default function AdminDashboardPage() {
   return (
-    <PageLayout>
-        <AdminPanel />
-    </PageLayout>
+    <AdminGuard>
+      <AdminPanel />
+    </AdminGuard>
   );
 }

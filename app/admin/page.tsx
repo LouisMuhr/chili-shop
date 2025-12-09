@@ -1,15 +1,11 @@
-import AdminPanel from "@/components/AdminPanel";
+// app/admin/page.tsx
 import AdminAuth from "@/components/AdminAuth";
-import PageLayout from "@/components/PageLayout";
+import AdminSelect from "@/components/SelectPage";
 
-export const dynamic = "force-dynamic";
-
-export default function AdminPage() {
+export default function AdminLogin() {
   return (
-    <PageLayout>
-      <AdminAuth>
-        <AdminPanel />
-      </AdminAuth>
-    </PageLayout>
+    <AdminAuth>
+      <AdminSelect />
+    </AdminAuth>
   );
 }
