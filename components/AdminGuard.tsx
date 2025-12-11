@@ -1,22 +1,29 @@
-// components/AdminGuard.tsx ← neu anlegen!
-
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function AdminGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const isAuthenticated = sessionStorage.getItem("admin-auth") === "true";
+    const auth = sessionStorage.getItem("admin-auth") === "true";
+    setIsAuthenticated(auth);
 
-    if (!isAuthenticated) {
-      router.replace("/admin"); // zurück zum Login
+    if (!auth) {
+      router.replace("/admin");
     }
   }, [router]);
 
-  const isAuthenticated = sessionStorage.getItem("admin-auth") === "true";
+  // Während SSR + während useEffect → noch kein sessionStorage
+  if (isAuthenticated === null) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <p className="text-2xl text-gray-400">Lade…</p>
+      </div>
+    );
+  }
 
   if (!isAuthenticated) {
     return (
