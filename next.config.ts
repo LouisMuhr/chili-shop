@@ -1,5 +1,3 @@
-// next.config.js  (falls du noch keine hast, erstelle sie im Root)
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
@@ -11,6 +9,11 @@ const nextConfig = {
         pathname: "/**",
       },
     ],
+  },
+
+  output: "standalone",
+  experimental: {
+    serverComponentsExternalPackages: ["mongoose"],
   },
 };
 
