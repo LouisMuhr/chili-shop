@@ -48,14 +48,17 @@ export default function AdminSelect() {
             </h2>
           </Link>
 
-          <div className="p-12 bg-gray-900/50 rounded-2xl border-2 border-dashed border-gray-700 opacity-60">
-            <h1 className="text-5xl mb-4 text-gray-600 text-balance">
-              Settings
+          <Link
+            href="/admin/orders"
+            className="block p-12 bg-gray-900 hover:bg-gray-800 rounded-2xl border-2 border-gray-700 hover:border-red-600 transition-all duration-300 transform hover:scale-105 shadow-2xl"
+          >
+            <h1 className="text-5xl mb-4 text-gray-600">
+              Orders
             </h1>
             <h2 className="text-xl font-bold text-gray-600 mb-3">
-              In Entwicklung
+              Bestellungen verwalten
             </h2>
-          </div>
+          </Link>
         </div>
 
         <div className="mt-12 text-center">
