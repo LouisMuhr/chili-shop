@@ -13,14 +13,15 @@ export async function POST(request: Request) {
   const orders = JSON.parse(data);
 
   // Bestellnummer generieren (einfach: höchste ID + 1)
-  const nextId = orders.length > 0 ? Math.max(...orders.map((o: any) => o.id)) + 1 : 1;
+  const nextId =
+    orders.length > 0 ? Math.max(...orders.map((o: any) => o.id)) + 1 : 1;
   const orderNumber = `2025-${String(nextId).padStart(4, "0")}`;
 
   const orderWithMeta = {
     id: nextId,
     orderNumber,
     date: new Date().toISOString(),
-    status: newOrder.pickup ? "Wartet auf Abholung" : "Zahlung ausstehend",
+    status: newOrder.pickup ? "Abholung - nicht bezahlt" : "Online - bezahlt",
     pickup: newOrder.pickup || false,
     ...newOrder,
   };

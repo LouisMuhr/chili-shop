@@ -37,6 +37,7 @@ export default function CheckoutPage() {
         total,
         email,
         pickup,
+        status: pickup ? "Abholung - nicht bezahlt" : "Online - bezahlt",
       };
 
       const res = await fetch("/api/orders/create", {
