@@ -1,60 +1,90 @@
-// app/checkout/page.tsx ← KOMPLETT ERSETZEN!
+// app/checkout/page.tsx ← ersetzen!
 
 "use client";
 
-import { useCart } from "@/lib/cartStore";
+import { useCart, CartItem } from "@/lib/cartStore";
 import { useState } from "react";
 
 export default function CheckoutPage() {
-  const { items, getTotalPrice } = useCart();
+  const { items, getTotalPrice, clearCart } = useCart();
   const [pickup, setPickup] = useState(false);
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const total = getTotalPrice();
 
   const handleCheckout = async () => {
-    if (pickup) {
-      alert("Bestellung für Abholung gespeichert! Zahle vor Ort.");
-      window.location.href = "/checkout/success?pickup=true";
+    if (!email) {
+      alert("Bitte E-Mail-Adresse angeben");
       return;
     }
 
-    alert("Online-Zahlung kommt bald – Test: Weiterleitung zu Success");
-    window.location.href = "/checkout/success";
+    setLoading(true);
+
+    const order = {
+      items: items.map((i: CartItem) => ({
+        id: i.id,
+        name: i.name,
+        quantity: i.quantity,
+        price: i.price,
+      })),
+      total,
+      email,
+      pickup,
+    };
+
+    const res = await fetch("/api/orders/create", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(order),
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      clearCart();
+      window.location.href = `/checkout/success?order=${data.orderNumber}&pickup=${pickup}`;
+    } else {
+      alert("Fehler beim Speichern der Bestellung");
+    }
+
+    setLoading(false);
   };
 
   return (
-    <div className="min-h-screen bg-black text-white pt-28 pb-16 px-6"> {/* ← mehr Platz oben! */}
+    <div className="min-h-screen bg-black text-white pt-24 pb-16 px-6">
       <div className="max-w-3xl mx-auto">
         <h1 className="text-4xl md:text-5xl font-black text-center text-[#e63946] mb-10">
           Checkout
         </h1>
 
         <div className="bg-[#0f0f0f] rounded-2xl p-6 md:p-10 shadow-2xl border border-gray-800">
+          {/* E-Mail */}
           <div className="mb-8">
-            <h2 className="text-2xl font-bold mb-5">Lieferoption</h2>
+            <label className="block text-lg font-bold mb-3">Deine E-Mail (für Bestätigung)</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="deine@email.de"
+              className="w-full px-5 py-4 bg-gray-900 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#e63946]"
+              required
+            />
+          </div>
 
+          {/* Lieferoption */}
+          <div className="mb-10">
+            <h2 className="text-2xl font-bold mb-5">Lieferoption</h2>
             <div className="space-y-4">
               <label className="flex items-center gap-4 p-5 bg-gray-900 rounded-xl cursor-pointer hover:bg-gray-800 transition">
-                <input
-                  type="radio"
-                  name="delivery"
-                  checked={!pickup}
-                  onChange={() => setPickup(false)}
-                  className="w-5 h-5 text-[#e63946]"
-                />
+                <input type="radio" name="delivery" checked={!pickup} onChange={() => setPickup(false)} className="w-5 h-5 text-[#e63946]" />
                 <div>
                   <p className="text-lg font-bold">Versand nach Hause</p>
                   <p className="text-gray-400 text-sm">+ Versandkosten (später)</p>
                 </div>
               </label>
-
               <label className="flex items-center gap-4 p-5 bg-gray-900 rounded-xl cursor-pointer hover:bg-gray-800 transition">
-                <input
-                  type="radio"
-                  name="delivery"
-                  checked={pickup}
-                  onChange={() => setPickup(true)}
-                  className="w-5 h-5 text-[#e63946]"
-                />
+                <input type="radio" name="delivery" checked={pickup} onChange={() => setPickup(true)} className="w-5 h-5 text-[#e63946]" />
                 <div>
                   <p className="text-lg font-bold">Abholung vor Ort</p>
                   <p className="text-gray-400 text-sm">Zahle bar oder mit Karte bei Abholung</p>
@@ -71,9 +101,10 @@ export default function CheckoutPage() {
 
           <button
             onClick={handleCheckout}
-            className="w-full py-5 bg-gradient-to-r from-[#e63946] to-[#c1121f] hover:from-[#c1121f] hover:to-[#9b0f1a] text-white font-black text-xl rounded-xl shadow-2xl transform hover:scale-105 transition-all duration-300"
+            disabled={loading}
+            className="w-full py-5 bg-gradient-to-r from-[#e63946] to-[#c1121f] hover:from-[#c1121f] hover:to-[#9b0f1a] text-white font-black text-xl rounded-xl shadow-2xl transform hover:scale-105 transition-all duration-300 disabled:opacity-70"
           >
-            {pickup ? "Bestellung für Abholung bestätigen" : "Zur Zahlung →"}
+            {loading ? "Wird gespeichert..." : pickup ? "Bestellung für Abholung bestätigen" : "Zur Zahlung →"}
           </button>
 
           {pickup && (
