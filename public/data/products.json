@@ -1,11 +1,38 @@
 [
   {
     "id": "1765623418313",
-    "name": "Neues Produkt",
+    "name": "Cayenne",
     "price": 19.99,
     "hotness": 100000,
     "spiciness": 3,
     "discountPercent": 0,
     "image": "/images/1765623420874-chili.jpeg"
+  },
+  {
+    "id": "1765632670597",
+    "name": "Jalapeno",
+    "price": 25,
+    "hotness": 100000,
+    "spiciness": 3,
+    "discountPercent": 15,
+    "image": "/images/1765632673541-WhatsApp Image 2025-10-17 at 10.41.53.jpeg"
+  },
+  {
+    "id": "1765632681887",
+    "name": "Habanero",
+    "price": 10,
+    "hotness": 100000,
+    "spiciness": 3,
+    "discountPercent": 0,
+    "image": "/images/1765632684086-WhatsApp Image 2025-10-17 at 10.41.59 (1).jpeg"
+  },
+  {
+    "id": "1765632704038",
+    "name": "Violette Chilis+",
+    "price": 16,
+    "hotness": 100000,
+    "spiciness": 3,
+    "discountPercent": 10,
+    "image": "/images/1765632706349-WhatsApp Image 2025-10-17 at 10.41.56 (1).jpeg"
   }
 ]
