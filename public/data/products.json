@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "id": "1765623418313",
+    "name": "Neues Produkt",
+    "price": 19.99,
+    "hotness": 100000,
+    "spiciness": 3,
+    "discountPercent": 0,
+    "image": "/images/1765623420874-chili.jpeg"
+  }
+]
