@@ -2,7 +2,7 @@
   {
     "id": 1,
     "orderNumber": "2025-0001",
-    "date": "2025-12-13T13:49:58.241Z",
+    "date": "2025-12-14T10:53:45.608Z",
     "status": "Online - bezahlt",
     "pickup": false,
     "items": [
@@ -11,24 +11,30 @@
         "name": "Cayenne",
         "quantity": 1,
         "price": 19.99
-      }
-    ],
-    "total": 19.99,
-    "email": "louismuhr8@gmail.com"
-  },
-  {
-    "id": 2,
-    "orderNumber": "2025-0002",
-    "date": "2025-12-13T13:50:09.482Z",
-    "status": "Abholung - nicht bezahlt",
-    "pickup": true,
-    "items": [
+      },
       {
         "id": "1765632670597",
         "name": "Jalapeno",
         "quantity": 1,
         "price": 21.25
-      },
+      }
+    ],
+    "total": 41.239999999999995,
+    "email": "louismuhr8@gmail.com",
+    "address": {
+      "street": "Döblergasse",
+      "city": "Wien",
+      "zip": "1070",
+      "country": "Österreich"
+    }
+  },
+  {
+    "id": 2,
+    "orderNumber": "2025-0002",
+    "date": "2025-12-14T10:53:55.963Z",
+    "status": "Abholung - nicht bezahlt",
+    "pickup": true,
+    "items": [
       {
         "id": "1765632681887",
         "name": "Habanero",
@@ -42,7 +48,43 @@
         "price": 14.4
       }
     ],
-    "total": 45.65,
-    "email": "louismuhr8@gmail.com"
+    "total": 24.4,
+    "email": "louismuhr8@gmail.com",
+    "address": null
+  },
+  {
+    "id": 3,
+    "orderNumber": "2025-0003",
+    "date": "2025-12-14T10:54:07.019Z",
+    "status": "Online - bezahlt",
+    "pickup": false,
+    "items": [
+      {
+        "id": "1765623418313",
+        "name": "Cayenne",
+        "quantity": 1,
+        "price": 19.99
+      },
+      {
+        "id": "1765632670597",
+        "name": "Jalapeno",
+        "quantity": 2,
+        "price": 21.25
+      },
+      {
+        "id": "1765632681887",
+        "name": "Habanero",
+        "quantity": 1,
+        "price": 10
+      }
+    ],
+    "total": 72.49,
+    "email": "louismuhr8@gmail.com",
+    "address": {
+      "street": "Döblergasse",
+      "city": "Wien",
+      "zip": "1070",
+      "country": "Österreich"
+    }
   }
 ]
