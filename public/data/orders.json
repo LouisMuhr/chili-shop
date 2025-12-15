@@ -157,20 +157,29 @@
     "email": "louismuhr8@gmail.com"
   },
   {
-    "id": 3,
-    "orderNumber": "2025-0003",
-    "date": "2025-12-13T14:12:16.481Z",
+    "id": 7,
+    "orderNumber": "2025-0007",
+    "date": "2025-12-15T16:55:09.799Z",
     "status": "Online - bezahlt",
     "pickup": false,
     "items": [
       {
-        "id": "1765623418313",
-        "name": "Cayenne",
+        "id": "1765632670597",
+        "name": "Jalapeno",
         "quantity": 1,
-        "price": 19.99
+        "price": 21.25
       }
     ],
-    "total": 19.99,
-    "email": "louismuhr8@gmail.com"
+    "subtotal": 21.25,
+    "shippingCost": 3.5,
+    "total": 24.75,
+    "email": "louismuhr8@gmail.com",
+    "address": {
+      "country": "BG",
+      "street": "",
+      "zip": "",
+      "city": ""
+    },
+    "deliveryOption": "home"
   }
 ]
