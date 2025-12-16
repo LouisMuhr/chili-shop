@@ -22,7 +22,25 @@ type CartStore = {
 export const useCart = create<CartStore>((set, get) => ({
   items: [],
 
-  addItem: (item) => set((state) => ({ items: [...state.items, { ...item, quantity: 1 }] })),
+  addItem: (newItem) => set((state) => {
+  const existingItem = state.items.find((item) => item.id === newItem.id);
+
+  if (existingItem) {
+    // Produkt schon da → Menge erhöhen
+    return {
+      items: state.items.map((item) =>
+        item.id === newItem.id
+          ? { ...item, quantity: item.quantity + (newItem.quantity || 1) }
+          : item
+      ),
+    };
+  }
+
+  // Produkt neu → hinzufügen
+  return {
+    items: [...state.items, { ...newItem, quantity: newItem.quantity || 1 }],
+  };
+}),
 
   removeItem: (id) => set((state) => ({ items: state.items.filter((i) => i.id !== id) })),
 

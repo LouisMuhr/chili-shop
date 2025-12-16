@@ -299,14 +299,14 @@ export default function CheckoutPage() {
                         {hasFreeShipping ? (
                           <>
                             <span className="line-through mr-2">
-                              {shippingCosts.home.toFixed(2)} €
+                              {shippingCosts.courier.toFixed(2)} €
                             </span>
                             <span className="text-green-400 font-bold">
                               0 € - GRATIS VERSAND
                             </span>
                           </>
                         ) : (
-                          `${shippingCosts.home.toFixed(2)} € Versandkosten`
+                          `${shippingCosts.courier.toFixed(2)} € Versandkosten`
                         )}
                       </p>
                     </div>

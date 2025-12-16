@@ -489,52 +489,6 @@
     "deliveryOption": "local"
   },
   {
-    "id": 19,
-    "orderNumber": "2025-0019",
-    "date": "2025-12-16T19:09:40.912Z",
-    "status": "Online - bezahlt",
-    "pickup": false,
-    "items": [
-      {
-        "id": "1765623418313",
-        "name": "Cayenne",
-        "quantity": 1,
-        "price": 19.99
-      },
-      {
-        "id": "1765623418313",
-        "name": "Cayenne",
-        "quantity": 1,
-        "price": 19.99
-      },
-      {
-        "id": "1765623418313",
-        "name": "Cayenne",
-        "quantity": 1,
-        "price": 19.99
-      },
-      {
-        "id": "1765623418313",
-        "name": "Cayenne",
-        "quantity": 1,
-        "price": 19.99
-      }
-    ],
-    "subtotal": 79.96,
-    "shippingCost": 3.5,
-    "total": 79.96,
-    "email": "louismuhr8@gmail.com",
-    "address": {
-      "country": "BG",
-      "street": "Zieglergasse",
-      "houseNumber": "55",
-      "doorNumber": "11",
-      "zip": "1070",
-      "city": "Wien"
-    },
-    "deliveryOption": "home"
-  },
-  {
     "id": 20,
     "orderNumber": "2025-0020",
     "date": "2025-12-16T19:10:29.002Z",
