@@ -2,8 +2,6 @@
 
 "use client";
 
-import Image from "next/image";
-
 type Order = {
   id: number;
   orderNumber: string;
@@ -15,6 +13,8 @@ type Order = {
   items: { name: string; quantity: number; price: number }[];
   address?: {
     street: string;
+    houseNumber: string;
+    doorNumber: string;
     city: string;
     zip: string;
     country: string;
@@ -24,9 +24,15 @@ type Order = {
 type OrderInfoProps = {
   order: Order;
   onClose: () => void;
+  onFinished: (orderId: number) => void;
 };
 
-export default function OrderInfo({ order, onClose }: OrderInfoProps) {
+export default function OrderInfo({ order, onClose, onFinished }: OrderInfoProps) {
+  const markAsFinished = () => {
+    onFinished(order.id); // ← Aufruf der übergebenen Funktion
+    onClose(); // Modal schließen
+  };
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md px-6"
@@ -52,23 +58,40 @@ export default function OrderInfo({ order, onClose }: OrderInfoProps) {
             <p className="text-xl text-gray-400">
               {new Date(order.date).toLocaleString("de-DE")}
             </p>
-            <p className={`mt-4 text-2xl font-bold ${order.status.includes("Online") ? "text-green-400" : "text-yellow-400"}`}>
+            <p
+              className={`mt-4 text-2xl font-bold ${
+                order.status.includes("Online")
+                  ? "text-green-400"
+                  : "text-yellow-400"
+              }`}
+            >
               {order.status}
             </p>
             {order.pickup && (
-              <p className="mt-4 text-xl text-blue-400 font-bold">Abholung vor Ort</p>
+              <p className="mt-4 text-xl text-blue-400 font-bold">
+                Abholung vor Ort
+              </p>
             )}
           </div>
 
           {/* Kundeninfo */}
           <div className="bg-gray-900/50 rounded-2xl p-6">
             <h3 className="text-2xl font-bold mb-4">Kundendaten</h3>
-            <p className="text-lg text-gray-300"><strong>E-Mail:</strong> {order.email}</p>
+            <p className="text-lg text-gray-300">
+              <strong>E-Mail:</strong> {order.email}
+            </p>
             {!order.pickup && order.address && (
               <div className="mt-4 space-y-2 text-gray-300">
-                <p><strong>Lieferadresse:</strong></p>
-                <p>{order.address.street}</p>
-                <p>{order.address.zip} {order.address.city}</p>
+                <p>
+                  <strong>Lieferadresse:</strong>
+                </p>
+                <p>
+                  {order.address.street} {order.address.houseNumber}
+                  {order.address.doorNumber && ` / ${order.address.doorNumber}`}
+                </p>
+                <p>
+                  {order.address.zip} {order.address.city}
+                </p>
                 <p>{order.address.country}</p>
               </div>
             )}
@@ -79,10 +102,15 @@ export default function OrderInfo({ order, onClose }: OrderInfoProps) {
             <h3 className="text-2xl font-bold mb-6">Bestellte Produkte</h3>
             <div className="space-y-4">
               {order.items.map((item, i) => (
-                <div key={i} className="flex justify-between items-center py-4 border-b border-gray-800 last:border-0">
+                <div
+                  key={i}
+                  className="flex justify-between items-center py-4 border-b border-gray-800 last:border-0"
+                >
                   <div>
                     <p className="text-xl font-bold">{item.name}</p>
-                    <p className="text-lg text-yellow-400">Menge: {item.quantity}</p>
+                    <p className="text-lg text-yellow-400">
+                      Menge: {item.quantity}
+                    </p>
                   </div>
                   <p className="text-xl font-bold text-[#e63946]">
                     {(item.price * item.quantity).toFixed(2)} €
@@ -92,11 +120,18 @@ export default function OrderInfo({ order, onClose }: OrderInfoProps) {
             </div>
           </div>
 
-          {/* Gesamtpreis */}
-          <div className="text-center pt-6 border-t border-gray-800">
-            <p className="text-5xl font-black text-[#e63946]">
+{/* Gesamtpreis + Fertig-Button */}
+          <div className="text-center pt-6 border-t border-gray-800 space-y-6">
+            <p className="text-3xl font-black text-[#e63946]">
               Gesamt: {order.total.toFixed(2)} €
             </p>
+
+            <button
+              onClick={markAsFinished}
+              className="px-10 py-4 bg-green-600 hover:bg-green-500 text-white font-black text-lg rounded-xl shadow-2xl transition transform hover:scale-105"
+            >
+              Als fertig markieren
+            </button>
           </div>
         </div>
       </div>
