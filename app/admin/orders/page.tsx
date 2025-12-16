@@ -1,10 +1,9 @@
-// app/admin/orders/page.tsx ← KOMPLETT ERSETZEN!
-
 "use client";
 
-import { useEffect, useState } from "react";
-import OrderInfo from "@/components/OrderInfo";
+import { useEffect, useState, useCallback } from "react";
+import OrderInfo from "@/components/OrderInfo"; // Angenommen, diese Komponente existiert
 
+// Typisierung
 type Order = {
   id: number;
   orderNumber: string;
@@ -16,6 +15,8 @@ type Order = {
   items: { name: string; quantity: number; price: number }[];
   address?: {
     street: string;
+    houseNumber: string;
+    doorNumber: string;
     city: string;
     zip: string;
     country: string;
@@ -27,21 +28,108 @@ export default function AdminOrdersPage() {
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  // Es ist besser, einen Zustand für den Ladevorgang der Markierung zu haben, 
+  // um Doppelklicks zu verhindern. Wir verwenden hier nur einen allgemeinen Ladezustand.
+  const [isMarking, setIsMarking] = useState(false); 
   const [statusFilter, setStatusFilter] = useState("all");
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
-  useEffect(() => {
-    fetch("/data/orders.json?t=" + Date.now())
-      .then((res) => res.json())
-      .then((data) => {
-        // Neueste zuerst sortieren
-        const sorted = data.sort((a: Order, b: Order) => new Date(b.date).getTime() - new Date(a.date).getTime());
-        setOrders(sorted);
-        setFilteredOrders(sorted);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
+  // --- HILFSFUNKTIONEN ZUM DATENABRUF ---
+
+  const fetchOrders = useCallback(async () => {
+    setLoading(true);
+    try {
+      // Füge den Cache-Buster hinzu, um sicherzustellen, dass die neueste JSON-Datei abgerufen wird
+      const res = await fetch("/data/orders.json?t=" + Date.now()); 
+      if (!res.ok) throw new Error("Netzwerkfehler beim Laden der Bestellungen.");
+      
+      const data: Order[] = await res.json();
+      
+      // Neueste zuerst sortieren
+      const sorted = data.sort(
+        (a: Order, b: Order) =>
+          new Date(b.date).getTime() - new Date(a.date).getTime()
+      );
+      setOrders(sorted);
+      setFilteredOrders(sorted);
+    } catch (error) {
+      console.error("Fehler beim Abrufen der Bestellungen:", error);
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  // --- NEUE FUNKTION: markAsFinished ---
+
+// app/admin/orders/page.tsx
+
+  const markAsFinished = async (orderId: number) => {
+    if (isMarking) return; 
+
+    if (!window.confirm(`Soll Bestellung ${orderId} wirklich als fertig markiert werden?`)) {
+      return;
+    }
+    
+    setIsMarking(true);
+    
+    try {
+      const res = await fetch("/api/orders/finish", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ orderId }),
+      });
+
+      // ZUERST: Prüfen, ob die Antwort einen Content-Length oder Content-Type hat
+      const contentType = res.headers.get("content-type");
+      const isJson = contentType && contentType.includes("application/json");
+
+      if (!res.ok) {
+        let errorMessage = "Fehler beim Verschieben der Bestellung.";
+        
+        if (isJson) {
+          // Nur versuchen zu parsen, wenn der Header JSON verspricht
+          const errorData = await res.json(); 
+          errorMessage = errorData.message || errorMessage;
+        } else {
+          // Andernfalls den Status und Text verwenden
+          errorMessage = `Serverfehler ${res.status}: ${res.statusText}.`;
+        }
+        
+        throw new Error(errorMessage);
+      }
+
+      // Erfolgreicher Fall (Status 200/201):
+      
+      // Obwohl die API-Route bei Erfolg JSON zurückgibt, 
+      // ist es besser, auch hier auf den Body zu prüfen, falls der Server ihn weglässt.
+      if (isJson) {
+        await res.json(); // Oder einfach verarbeiten, falls Sie die Daten brauchen
+      }
+      
+      // Erfolgreich: Bestellung aus dem lokalen State entfernen
+      setOrders(prevOrders => prevOrders.filter(order => order.id !== orderId));
+      
+      if (selectedOrder && selectedOrder.id === orderId) {
+        setSelectedOrder(null);
+      }
+
+      alert(`Bestellung ${orderId} wurde erfolgreich abgeschlossen.`);
+
+    } catch (error: any) {
+      console.error("markAsFinished Fehler:", error);
+      alert(`Fehler beim Abschluss der Bestellung: ${error.message || 'Unbekannter Fehler'}`);
+    } finally {
+      setIsMarking(false);
+    }
+  };
+
+  // --- useEffect Hooks ---
+
+  useEffect(() => {
+    fetchOrders();
+  }, [fetchOrders]); // Initiales Laden der Bestellungen
 
   useEffect(() => {
     let filtered = orders;
@@ -59,21 +147,9 @@ export default function AdminOrdersPage() {
     }
 
     setFilteredOrders(filtered);
-  }, [search, statusFilter, orders]);
+  }, [search, statusFilter, orders]); // Filterlogik
 
-  const markAsFinished = async (orderId: number) => {
-    const updatedOrders = orders.filter((o) => o.id !== orderId);
-
-    const res = await fetch("/api/admin/orders/finish", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updatedOrders),
-    });
-
-    if (res.ok) {
-      setOrders(updatedOrders);
-    }
-  };
+  // --- Render Logik ---
 
   if (loading) {
     return (
@@ -87,7 +163,9 @@ export default function AdminOrdersPage() {
     return (
       <div className="min-h-screen bg-black text-white flex items-center justify-center">
         <p className="text-3xl">
-          {search || statusFilter !== "all" ? "Keine passenden Bestellungen gefunden" : "Noch keine Bestellungen"}
+          {search || statusFilter !== "all"
+            ? "Keine passenden Bestellungen gefunden"
+            : "Noch keine Bestellungen"}
         </p>
       </div>
     );
@@ -117,7 +195,10 @@ export default function AdminOrdersPage() {
           >
             <option value="all">Alle Status</option>
             <option value="Online - bezahlt">Online - bezahlt</option>
-            <option value="Abholung - nicht bezahlt">Abholung - nicht bezahlt</option>
+            <option value="Abholung - nicht bezahlt">
+              Abholung - nicht bezahlt
+            </option>
+            {/* Hinzufügen weiterer Status, falls nötig */}
           </select>
         </div>
 
@@ -132,7 +213,9 @@ export default function AdminOrdersPage() {
               <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-6">
                 <div className="flex-1">
                   <div className="flex items-center gap-4 mb-4">
-                    <span className="text-2xl font-black">{order.orderNumber}</span>
+                    <span className="text-2xl font-black">
+                      {order.orderNumber}
+                    </span>
                     <span className="text-sm text-gray-400">
                       {new Date(order.date).toLocaleString("de-DE")}
                     </span>
@@ -143,23 +226,35 @@ export default function AdminOrdersPage() {
                     )}
                   </div>
 
-                  <p className="text-gray-300 mb-2"><strong>E-Mail:</strong> {order.email}</p>
+                  <p className="text-gray-300 mb-2">
+                    <strong>E-Mail:</strong> {order.email}
+                  </p>
                   <p className="text-gray-300 mb-4">
                     <strong>Status:</strong>{" "}
-                    <span className={`font-bold ${order.status.includes("Online") ? "text-green-400" : "text-yellow-400"}`}>
+                    <span
+                      className={`font-bold ${
+                        order.status.includes("Online")
+                          ? "text-green-400"
+                          : "text-yellow-400"
+                      }`}
+                    >
                       {order.status}
                     </span>
                   </p>
 
                   <div className="mt-4">
-                    <p className="font-bold mb-2">Produkte ({order.items.length}):</p>
+                    <p className="font-bold mb-2">
+                      Produkte ({order.items.length}):
+                    </p>
                     <ul className="text-gray-300">
                       {order.items.slice(0, 3).map((item, i) => (
                         <li key={i}>
                           {item.quantity} × {item.name}
                         </li>
                       ))}
-                      {order.items.length > 3 && <li>... und {order.items.length - 3} weitere</li>}
+                      {order.items.length > 3 && (
+                        <li>... und {order.items.length - 3} weitere</li>
+                      )}
                     </ul>
                   </div>
                 </div>
@@ -171,12 +266,13 @@ export default function AdminOrdersPage() {
 
                   <button
                     onClick={(e) => {
-                      e.stopPropagation();
+                      e.stopPropagation(); // Verhindert, dass das Detail-Modal geöffnet wird
                       markAsFinished(order.id);
                     }}
-                    className="px-8 py-4 bg-green-600 hover:bg-green-500 text-white font-bold rounded-xl shadow-lg transition transform hover:scale-105"
+                    disabled={isMarking} // Button deaktivieren während des Verschiebevorgangs
+                    className="px-8 py-4 bg-green-600 hover:bg-green-500 text-white font-bold rounded-xl shadow-lg transition transform hover:scale-105 disabled:bg-gray-500 disabled:cursor-not-allowed"
                   >
-                    Als fertig markieren
+                    {isMarking ? "Verarbeite..." : "Als fertig markieren"}
                   </button>
                 </div>
               </div>
@@ -190,6 +286,7 @@ export default function AdminOrdersPage() {
         <OrderInfo
           order={selectedOrder}
           onClose={() => setSelectedOrder(null)}
+          onFinished={markAsFinished} // markAsFinished an die Detail-Komponente übergeben
         />
       )}
     </div>

@@ -2,8 +2,6 @@
 
 "use client";
 
-import Image from "next/image";
-
 type Order = {
   id: number;
   orderNumber: string;
@@ -26,9 +24,15 @@ type Order = {
 type OrderInfoProps = {
   order: Order;
   onClose: () => void;
+  onFinished: (orderId: number) => void;
 };
 
-export default function OrderInfo({ order, onClose }: OrderInfoProps) {
+export default function OrderInfo({ order, onClose, onFinished }: OrderInfoProps) {
+  const markAsFinished = () => {
+    onFinished(order.id); // ← Aufruf der übergebenen Funktion
+    onClose(); // Modal schließen
+  };
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md px-6"
@@ -116,11 +120,18 @@ export default function OrderInfo({ order, onClose }: OrderInfoProps) {
             </div>
           </div>
 
-          {/* Gesamtpreis */}
-          <div className="text-center pt-6 border-t border-gray-800">
-            <p className="text-5xl font-black text-[#e63946]">
+{/* Gesamtpreis + Fertig-Button */}
+          <div className="text-center pt-6 border-t border-gray-800 space-y-6">
+            <p className="text-3xl font-black text-[#e63946]">
               Gesamt: {order.total.toFixed(2)} €
             </p>
+
+            <button
+              onClick={markAsFinished}
+              className="px-10 py-4 bg-green-600 hover:bg-green-500 text-white font-black text-lg rounded-xl shadow-2xl transition transform hover:scale-105"
+            >
+              Als fertig markieren
+            </button>
           </div>
         </div>
       </div>

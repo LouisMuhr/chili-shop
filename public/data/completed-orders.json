@@ -1,0 +1,92 @@
+[
+  {
+    "id": 21,
+    "orderNumber": "2025-0021",
+    "date": "2025-12-16T19:22:28.616Z",
+    "status": "Online - bezahlt",
+    "pickup": false,
+    "items": [
+      {
+        "id": "1765623418313",
+        "name": "Cayenne",
+        "quantity": 4,
+        "price": 19.99
+      }
+    ],
+    "subtotal": 79.96,
+    "shippingCost": 9.99,
+    "total": 79.96,
+    "email": "louismuhr8@gmail.com",
+    "address": {
+      "country": "DE",
+      "street": "Zieglergasse",
+      "houseNumber": "55",
+      "doorNumber": "11",
+      "zip": "1070",
+      "city": "Wien"
+    },
+    "deliveryOption": "home"
+  },
+  {
+    "id": 20,
+    "orderNumber": "2025-0020",
+    "date": "2025-12-16T19:10:29.002Z",
+    "status": "Online - bezahlt",
+    "pickup": false,
+    "items": [
+      {
+        "id": "1765623418313",
+        "name": "Cayenne",
+        "quantity": 1,
+        "price": 19.99
+      },
+      {
+        "id": "1765632670597",
+        "name": "Jalapeno",
+        "quantity": 1,
+        "price": 21.25
+      }
+    ],
+    "subtotal": 41.239999999999995,
+    "shippingCost": 3.5,
+    "total": 44.739999999999995,
+    "email": "louismuhr8@gmail.com",
+    "address": {
+      "country": "BG",
+      "street": "Zieglergasse",
+      "houseNumber": "55",
+      "doorNumber": "11",
+      "zip": "1070",
+      "city": "Wien"
+    },
+    "deliveryOption": "home"
+  },
+  {
+    "id": 18,
+    "orderNumber": "2025-0018",
+    "date": "2025-12-15T18:22:29.663Z",
+    "status": "Abholung vor Ort - nicht bezahlt",
+    "pickup": false,
+    "items": [
+      {
+        "id": "1765623418313",
+        "name": "Cayenne",
+        "quantity": 1,
+        "price": 19.99
+      }
+    ],
+    "subtotal": 19.99,
+    "shippingCost": 0,
+    "total": 19.99,
+    "email": "louismuhr8@gmail.com",
+    "address": {
+      "country": "BG",
+      "street": "Zieglergasse",
+      "houseNumber": "55",
+      "doorNumber": "11",
+      "zip": "1000",
+      "city": "Sofia"
+    },
+    "deliveryOption": "local"
+  }
+]
