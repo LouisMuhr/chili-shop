@@ -189,7 +189,10 @@ export default function ClientShop() {
                         e.stopPropagation();
                         const finalPrice =
                           p.price * (1 - (p.discountPercent ?? 0) / 100);
-                        addItem({ id: p.id, name: p.name, price: finalPrice });
+                        addItem({
+                          id: p.id, name: p.name, price: finalPrice,
+                          quantity: 1
+                        });
                         showToast();
                       }}
                       className="w-full px-6 py-4 bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 text-white font-bold text-lg rounded-xl shadow-lg hover:shadow-red-600/50 transition-all duration-300 transform hover:scale-105"
