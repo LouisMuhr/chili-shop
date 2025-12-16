@@ -95,6 +95,7 @@ export default function ProductInfo({
                   id: product.id,
                   name: product.name,
                   price: finalPrice,
+                  quantity: 1
                 });
                 showToast(); // ← jetzt funktioniert's!
                 onClose();
