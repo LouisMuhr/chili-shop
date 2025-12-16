@@ -10,7 +10,7 @@ export default function BuyButton({
 
   return (
     <button
-      onClick={() => addItem(product)}
+      onClick={() => addItem({ ...product, quantity: 1 })}
       className="
     relative 
     bg-gradient-to-b from-[#222222] to-[#000000]
