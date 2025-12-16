@@ -89,7 +89,6 @@ export default function AdminOrdersPage() {
         if (isJson) {
           // Nur versuchen zu parsen, wenn der Header JSON verspricht
           const errorData = await res.json();
-          errorMessage = errorData.message || errorMessage;
           setSuccessMessage("Bestellung erfolgreich abgeschlossen!");
           setTimeout(() => setSuccessMessage(null), 3000);
         } else {
@@ -112,7 +111,6 @@ export default function AdminOrdersPage() {
       if (selectedOrder && selectedOrder.id === orderId) {
         setSelectedOrder(null);
       }
-
     } catch (error: any) {
       console.error("markAsFinished Fehler:", error);
       alert(
@@ -174,15 +172,14 @@ export default function AdminOrdersPage() {
   return (
     <div className="min-h-screen bg-black text-white pt-24 py-12 px-6">
       <div className="max-w-6xl mx-auto">
+        <h1 className="text-5xl font-black text-center text-[#e63946] mb-12">
+          Bestellungen
+        </h1>
         {successMessage && (
           <div className="mb-8 p-5 bg-green-900/70 border border-green-600 rounded-xl text-green-300 text-center font-bold text-lg">
             {successMessage}
           </div>
         )}
-        <h1 className="text-5xl font-black text-center text-[#e63946] mb-12">
-          Bestellungen
-        </h1>
-
         {/* Suche & Filter */}
         <div className="mb-10 flex flex-col md:flex-row gap-6">
           <input
