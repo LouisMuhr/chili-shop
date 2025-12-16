@@ -28,11 +28,12 @@ export default function AdminOrdersPage() {
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  // Es ist besser, einen Zustand für den Ladevorgang der Markierung zu haben, 
+  // Es ist besser, einen Zustand für den Ladevorgang der Markierung zu haben,
   // um Doppelklicks zu verhindern. Wir verwenden hier nur einen allgemeinen Ladezustand.
-  const [isMarking, setIsMarking] = useState(false); 
+  const [isMarking, setIsMarking] = useState(false);
   const [statusFilter, setStatusFilter] = useState("all");
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   // --- HILFSFUNKTIONEN ZUM DATENABRUF ---
 
@@ -40,11 +41,12 @@ export default function AdminOrdersPage() {
     setLoading(true);
     try {
       // Füge den Cache-Buster hinzu, um sicherzustellen, dass die neueste JSON-Datei abgerufen wird
-      const res = await fetch("/data/orders.json?t=" + Date.now()); 
-      if (!res.ok) throw new Error("Netzwerkfehler beim Laden der Bestellungen.");
-      
+      const res = await fetch("/data/orders.json?t=" + Date.now());
+      if (!res.ok)
+        throw new Error("Netzwerkfehler beim Laden der Bestellungen.");
+
       const data: Order[] = await res.json();
-      
+
       // Neueste zuerst sortieren
       const sorted = data.sort(
         (a: Order, b: Order) =>
@@ -61,17 +63,13 @@ export default function AdminOrdersPage() {
 
   // --- NEUE FUNKTION: markAsFinished ---
 
-// app/admin/orders/page.tsx
+  // app/admin/orders/page.tsx
 
   const markAsFinished = async (orderId: number) => {
-    if (isMarking) return; 
+    if (isMarking) return;
 
-    if (!window.confirm(`Soll Bestellung ${orderId} wirklich als fertig markiert werden?`)) {
-      return;
-    }
-    
     setIsMarking(true);
-    
+
     try {
       const res = await fetch("/api/orders/finish", {
         method: "POST",
@@ -87,39 +85,41 @@ export default function AdminOrdersPage() {
 
       if (!res.ok) {
         let errorMessage = "Fehler beim Verschieben der Bestellung.";
-        
+
         if (isJson) {
           // Nur versuchen zu parsen, wenn der Header JSON verspricht
-          const errorData = await res.json(); 
+          const errorData = await res.json();
           errorMessage = errorData.message || errorMessage;
+          setSuccessMessage("Bestellung erfolgreich abgeschlossen!");
+          setTimeout(() => setSuccessMessage(null), 3000);
         } else {
           // Andernfalls den Status und Text verwenden
           errorMessage = `Serverfehler ${res.status}: ${res.statusText}.`;
         }
-        
+
         throw new Error(errorMessage);
       }
 
-      // Erfolgreicher Fall (Status 200/201):
-      
-      // Obwohl die API-Route bei Erfolg JSON zurückgibt, 
-      // ist es besser, auch hier auf den Body zu prüfen, falls der Server ihn weglässt.
       if (isJson) {
         await res.json(); // Oder einfach verarbeiten, falls Sie die Daten brauchen
       }
-      
+
       // Erfolgreich: Bestellung aus dem lokalen State entfernen
-      setOrders(prevOrders => prevOrders.filter(order => order.id !== orderId));
-      
+      setOrders((prevOrders) =>
+        prevOrders.filter((order) => order.id !== orderId)
+      );
+
       if (selectedOrder && selectedOrder.id === orderId) {
         setSelectedOrder(null);
       }
 
-      alert(`Bestellung ${orderId} wurde erfolgreich abgeschlossen.`);
-
     } catch (error: any) {
       console.error("markAsFinished Fehler:", error);
-      alert(`Fehler beim Abschluss der Bestellung: ${error.message || 'Unbekannter Fehler'}`);
+      alert(
+        `Fehler beim Abschluss der Bestellung: ${
+          error.message || "Unbekannter Fehler"
+        }`
+      );
     } finally {
       setIsMarking(false);
     }
@@ -174,6 +174,11 @@ export default function AdminOrdersPage() {
   return (
     <div className="min-h-screen bg-black text-white pt-24 py-12 px-6">
       <div className="max-w-6xl mx-auto">
+        {successMessage && (
+          <div className="mb-8 p-5 bg-green-900/70 border border-green-600 rounded-xl text-green-300 text-center font-bold text-lg">
+            {successMessage}
+          </div>
+        )}
         <h1 className="text-5xl font-black text-center text-[#e63946] mb-12">
           Bestellungen
         </h1>
