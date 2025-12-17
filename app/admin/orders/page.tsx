@@ -37,6 +37,10 @@ export default function AdminOrdersPage() {
 
   // --- HILFSFUNKTIONEN ZUM DATENABRUF ---
 
+  useEffect(() => {
+    console.log("successMessage aktuell:", successMessage);
+  }, [successMessage]);
+
   const fetchOrders = useCallback(async () => {
     setLoading(true);
     try {
@@ -71,6 +75,7 @@ export default function AdminOrdersPage() {
     setIsMarking(true);
 
     try {
+      console.log("Starte markAsFinished für ID:", orderId);
       const res = await fetch("/api/orders/finish", {
         method: "POST",
         headers: {
@@ -79,31 +84,26 @@ export default function AdminOrdersPage() {
         body: JSON.stringify({ orderId }),
       });
 
-      // ZUERST: Prüfen, ob die Antwort einen Content-Length oder Content-Type hat
-      const contentType = res.headers.get("content-type");
-      const isJson = contentType && contentType.includes("application/json");
+      console.log("Response status:", res.status);
+      console.log("Response ok:", res.ok);
 
       if (!res.ok) {
         let errorMessage = "Fehler beim Verschieben der Bestellung.";
-
-        if (isJson) {
-          // Nur versuchen zu parsen, wenn der Header JSON verspricht
+        const contentType = res.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
           const errorData = await res.json();
-          setSuccessMessage("Bestellung erfolgreich abgeschlossen!");
-          setTimeout(() => setSuccessMessage(null), 3000);
+          errorMessage = errorData.message || errorMessage;
         } else {
-          // Andernfalls den Status und Text verwenden
-          errorMessage = `Serverfehler ${res.status}: ${res.statusText}.`;
+          errorMessage = `Serverfehler ${res.status}: ${res.statusText}`;
         }
-
         throw new Error(errorMessage);
       }
 
-      if (isJson) {
-        await res.json(); // Oder einfach verarbeiten, falls Sie die Daten brauchen
-      }
+      // Nur bei Erfolg: Success-Meldung und State aktualisieren
+      setSuccessMessage("Bestellung erfolgreich abgeschlossen!");
+      setTimeout(() => setSuccessMessage(null), 1100);
 
-      // Erfolgreich: Bestellung aus dem lokalen State entfernen
+      // Bestellung lokal entfernen
       setOrders((prevOrders) =>
         prevOrders.filter((order) => order.id !== orderId)
       );
@@ -113,11 +113,8 @@ export default function AdminOrdersPage() {
       }
     } catch (error: any) {
       console.error("markAsFinished Fehler:", error);
-      alert(
-        `Fehler beim Abschluss der Bestellung: ${
-          error.message || "Unbekannter Fehler"
-        }`
-      );
+      // Optional: Fehlermeldung anzeigen
+      // setError(error.message || "Unbekannter Fehler");
     } finally {
       setIsMarking(false);
     }
@@ -170,16 +167,18 @@ export default function AdminOrdersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white pt-24 py-12 px-6">
+    <div className="min-h-screen bg-black text-white pt-30 py-12 px-6">
       <div className="max-w-6xl mx-auto">
+        {successMessage && (
+          <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50">
+            <div className="px-8 py-4 bg-green-900/90 border border-green-500 rounded-full text-green-300 text-center font-bold text-lg shadow-2xl backdrop-blur-sm animate-pulse">
+              {successMessage}
+            </div>
+          </div>
+        )}
         <h1 className="text-5xl font-black text-center text-[#e63946] mb-12">
           Bestellungen
         </h1>
-        {successMessage && (
-          <div className="mb-8 p-5 bg-green-900/70 border border-green-600 rounded-xl text-green-300 text-center font-bold text-lg">
-            {successMessage}
-          </div>
-        )}
         {/* Suche & Filter */}
         <div className="mb-10 flex flex-col md:flex-row gap-6">
           <input
@@ -199,6 +198,9 @@ export default function AdminOrdersPage() {
             <option value="Online - bezahlt">Online - bezahlt</option>
             <option value="Abholung - nicht bezahlt">
               Abholung - nicht bezahlt
+            </option>
+            <option value="Abholung Kurier - bezahlt">
+              Abholung Kurier - bezahlt
             </option>
             {/* Hinzufügen weiterer Status, falls nötig */}
           </select>
@@ -235,9 +237,9 @@ export default function AdminOrdersPage() {
                     <strong>Status:</strong>{" "}
                     <span
                       className={`font-bold ${
-                        order.status.includes("Online")
-                          ? "text-green-400"
-                          : "text-yellow-400"
+                        order.status.includes("nicht")
+                          ? "text-yellow-400"
+                          : "text-green-400"
                       }`}
                     >
                       {order.status}
