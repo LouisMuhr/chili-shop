@@ -4,6 +4,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 const CORRECT_PASSWORD = "chili2025"; // ← Dein Passwort hier ändern!
 
@@ -12,7 +13,8 @@ export default function AdminAuth({ children }: { children: React.ReactNode }) {
   const [error, setError] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter();
-
+  const t = useTranslations();
+  
   // Prüfen, ob schon eingeloggt (bleibt bis Tab schließen)
   useEffect(() => {
     if (sessionStorage.getItem("admin-auth") === "true") {
