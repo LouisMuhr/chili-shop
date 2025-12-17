@@ -154,17 +154,38 @@ export default function AdminOrdersPage() {
     );
   }
 
-  if (filteredOrders.length === 0) {
-    return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center">
-        <p className="text-3xl">
+if (filteredOrders.length === 0) {
+  return (
+    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-6">
+      <div className="text-center space-y-8">
+        {/* Die Nachricht */}
+        <p className="text-2xl md:text-3xl font-medium text-gray-400">
           {search || statusFilter !== "all"
             ? "Keine passenden Bestellungen gefunden"
             : "Noch keine Bestellungen"}
         </p>
+
+        {/* Der Zurück-Knopf (erscheint nur, wenn Filter aktiv sind) */}
+        {(search || statusFilter !== "all") && (
+          <button
+            onClick={() => {
+              setSearch("");          // Suchfeld leeren
+              setStatusFilter("all"); // Status auf "Alle" setzen
+            }}
+            className="group flex items-center gap-3 px-8 py-4 bg-gray-900 hover:bg-gray-800 text-white rounded-2xl border border-gray-700 hover:border-red-600 transition-all duration-300 mx-auto shadow-xl"
+          >
+            <span className="text-xl transition-transform group-hover:-translate-x-1">
+              ←
+            </span>
+            <span className="font-bold uppercase tracking-widest text-sm">
+              Filter zurücksetzen
+            </span>
+          </button>
+        )}
       </div>
-    );
-  }
+    </div>
+  );
+}
 
   return (
     <div className="min-h-screen bg-black text-white pt-30 py-12 px-6">
