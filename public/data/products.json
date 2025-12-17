@@ -2,8 +2,8 @@
   {
     "id": "1765623418313",
     "name": "Cayenne",
-    "price": 19.99,
-    "hotness": 100000,
+    "price": 20,
+    "hotness": 10000,
     "spiciness": 3,
     "discountPercent": 0,
     "image": "/images/1765623420874-chili.jpeg"
@@ -28,11 +28,20 @@
   },
   {
     "id": "1765632704038",
-    "name": "Violette Chilis+",
+    "name": "Violette Chilis",
     "price": 16,
     "hotness": 100000,
     "spiciness": 3,
     "discountPercent": 10,
     "image": "/images/1765632706349-WhatsApp Image 2025-10-17 at 10.41.56 (1).jpeg"
+  },
+  {
+    "id": "1765986239737",
+    "name": "Neues Produkt",
+    "price": 19.99,
+    "hotness": 100000,
+    "spiciness": 3,
+    "discountPercent": 23,
+    "image": "/images/1765986259056-chili.jpeg"
   }
 ]

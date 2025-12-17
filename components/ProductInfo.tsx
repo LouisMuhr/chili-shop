@@ -33,11 +33,11 @@ export default function ProductInfo({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md px-6"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md px-6 overflow-y-auto"
       onClick={onClose}
     >
       <div
-        className="relative bg-gradient-to-b from-[#111111] to-black rounded-3xl shadow-2xl border border-gray-800 max-w-4xl w-full p-10 md:p-16 animate-in zoom-in-95 duration-300"
+        className="relative bg-gradient-to-b from-[#111111] to-black rounded-3xl shadow-2xl border border-gray-800 max-w-4xl w-full my-8 p-10 md:p-16 animate-in zoom-in-95 duration-300"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -47,7 +47,7 @@ export default function ProductInfo({
           ×
         </button>
 
-        <div className="grid md:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
           <div className="relative aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl">
             <Image
               src={product.image || "/images/fallback.jpg"}
