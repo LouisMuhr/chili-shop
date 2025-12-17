@@ -1,5 +1,3 @@
-// components/AdminPanel.tsx ← KOMPLETT ERSETZEN (nur das!)
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -8,11 +6,11 @@ import Image from "next/image";
 type Product = {
   id: string;
   name: string;
-  price: number;
-  hotness: number;
+  price: number | string; // Erlaubt String für leere Eingaben
+  hotness: number | string;
   spiciness: number;
   image?: string;
-  discountPercent?: number; // ← NEU: Rabatt in Prozent
+  discountPercent?: number | string;
 };
 
 export default function AdminPanel() {
@@ -22,6 +20,7 @@ export default function AdminPanel() {
   const [toast, setToast] = useState(false);
 
   useEffect(() => setHasMounted(true), []);
+
   useEffect(() => {
     if (!hasMounted) return;
     fetch("/admin/products")
@@ -34,14 +33,21 @@ export default function AdminPanel() {
   }, [hasMounted]);
 
   const saveProducts = async () => {
+    // Vor dem Speichern leere Strings zurück in 0 konvertieren
+    const cleanedProducts = products.map(p => ({
+      ...p,
+      price: p.price === "" ? 0 : Number(p.price),
+      hotness: p.hotness === "" ? 0 : Number(p.hotness),
+      discountPercent: p.discountPercent === "" ? 0 : Number(p.discountPercent)
+    }));
+
     await fetch("/admin/products", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(products),
+      body: JSON.stringify(cleanedProducts),
     });
-
     setToast(true);
-    setTimeout(() => setToast(false), 960); // verschwindet nach 2 Sekunden
+    setTimeout(() => setToast(false), 2000);
   };
 
   const addProduct = () => {
@@ -53,7 +59,7 @@ export default function AdminPanel() {
         price: 19.99,
         hotness: 100000,
         spiciness: 3,
-        discountPercent: 0, // ← Standardwert
+        discountPercent: 0,
       },
     ]);
   };
@@ -78,90 +84,41 @@ export default function AdminPanel() {
   if (!hasMounted || loading) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black text-white py-8 px-6">
-      {/* Kompakter Header */}
-      <div className="max-w-7xl mx-auto flex items-center justify-between mb-10 pt-20 md:pt-24">
-        <h1 className="text-3xl md:text-4xl font-black text-red-500 font-display">
-          Admin – Produkt-Editor
-        </h1>
-        <div className="flex gap-4">
-          <button
-            onClick={addProduct}
-            className="px-5 py-2.5 bg-green-600 hover:bg-green-500 rounded-xl font-bold text-sm shadow-lg"
-          >
-            + Neu
-          </button>
-          <button
-            onClick={saveProducts}
-            className="px-7 py-2.5 bg-red-600 hover:bg-red-500 rounded-xl font-bold text-sm shadow-lg"
-          >
-            Speichern
-          </button>
+    <div className="min-h-screen bg-[#0f172a] text-white py-8 px-6">
+      <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between mb-12 pt-16 md:pt-24 gap-6">
+        <div>
+          <h1 className="text-4xl font-black text-red-500 tracking-tight">ADMIN EDITOR</h1>
+        </div>
+        <div className="flex gap-3">
+          <button onClick={addProduct} className="px-6 py-3 bg-emerald-600 hover:bg-emerald-500 rounded-2xl font-bold text-sm shadow-lg shadow-emerald-900/20 transition-all">+ Neues Produkt</button>
+          <button onClick={saveProducts} className="px-8 py-3 bg-red-600 hover:bg-red-500 rounded-2xl font-bold text-sm shadow-lg shadow-red-900/20 transition-all">Speichern</button>
         </div>
       </div>
 
-      {/* Schöner Toast */}
       {toast && (
-        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 animate-in fade-in zoom-in-95 duration-300">
-          <div className="bg-green-600 text-white px-5 py-2.5 rounded-full font-bold text-sm shadow-2xl border border-green-400 flex items-center gap-2">
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={3}
-                d="M5 13l4 4L19 7"
-              />
-            </svg>
-            Save
-          </div>
+        <div className="fixed top-10 left-1/2 -translate-x-1/2 z-50 animate-bounce">
+          <div className="bg-emerald-600 text-white px-6 py-3 rounded-2xl font-bold shadow-2xl">✓ Gespeichert</div>
         </div>
       )}
 
-      {/* Kompakte Cards */}
-      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {products.map((p, i) => (
-          <div
-            key={p.id}
-            className="bg-gray-800 rounded-2xl p-6 border border-gray-700 shadow-xl"
-          >
-            {/* Bild */}
-            <div className="mb-6">
+          <div key={p.id} className="bg-[#1e293b] rounded-[2.5rem] p-6 border border-gray-800 shadow-2xl flex flex-col transition-transform hover:scale-[1.01]">
+            
+            {/* Bild Upload */}
+            <div className="mb-6 h-52 relative group">
               {p.image ? (
-                <div className="relative h-48 rounded-xl overflow-hidden border-2 border-dashed border-gray-600">
-                  <Image
-                    src={p.image}
-                    alt={p.name}
-                    fill
-                    className="object-cover"
-                  />
-                  <button
-                    onClick={() => updateProduct(i, "image", "")}
-                    className="absolute top-2 right-2 bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-xs"
-                  >
-                    ×
-                  </button>
+                <div className="relative h-full w-full rounded-3xl overflow-hidden">
+                  <Image src={p.image} alt={p.name} fill className="object-cover" />
+                  <button onClick={() => updateProduct(i, "image", "")} className="absolute top-3 right-3 bg-black/60 hover:bg-red-600 p-2 rounded-xl backdrop-blur-md transition-colors">✕</button>
                 </div>
               ) : (
-                <label className="block cursor-pointer">
-                  <div className="h-48 border-4 border-dashed border-gray-600 rounded-xl flex items-center justify-center hover:border-red-500 transition bg-gray-900/50">
-                    <p className="text-gray-400 text-sm text-center">
-                      Bild hochladen
-                    </p>
+                <label className="block cursor-pointer h-full">
+                  <div className="h-full border-2 border-dashed border-gray-700 rounded-3xl flex flex-col items-center justify-center hover:border-red-500/50 hover:bg-gray-800/50 transition-all bg-gray-900/30">
+                    <span className="text-3xl mb-2">📸</span>
+                    <p className="text-gray-500 text-xs font-bold uppercase tracking-widest">Bild Upload</p>
                   </div>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={(e) =>
-                      e.target.files?.[0] &&
-                      handleImageUpload(i, e.target.files[0])
-                    }
-                  />
+                  <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && handleImageUpload(i, e.target.files[0])} />
                 </label>
               )}
             </div>
@@ -169,83 +126,79 @@ export default function AdminPanel() {
             <input
               value={p.name}
               onChange={(e) => updateProduct(i, "name", e.target.value)}
-              className="w-full text-xl font-bold bg-transparent border-b border-gray-600 focus:border-red-500 focus:outline-none mb-4"
+              className="w-full text-2xl font-black bg-transparent border-b border-gray-700 focus:border-red-500 focus:outline-none mb-8 pb-1 tracking-tight"
             />
 
-            {/* Preis + Rabatt */}
-            <div className="grid grid-cols-2 gap-4 my-6">
-              <div>
-                <label className="text-gray-400 text-xs">Preis €</label>
-                <input
-                  type="number"
-                  step="0.01"
-                  value={p.price}
-                  onChange={(e) =>
-                    updateProduct(i, "price", parseFloat(e.target.value) || 0)
-                  }
-                  className="w-full bg-gray-700 px-3 py-2 rounded text-sm mt-1"
-                />
-              </div>
-              <div>
-                <label className="text-gray-400 text-xs">Rabatt %</label>
-                <input
-                  type="number"
-                  min="0"
-                  max="100"
-                  value={p.discountPercent ?? 0}
-                  onChange={(e) =>
-                    updateProduct(
-                      i,
-                      "discountPercent",
-                      parseInt(e.target.value) || 0
-                    )
-                  }
-                  className="w-full bg-gray-700 px-3 py-2 rounded text-sm mt-1"
-                  placeholder="0"
-                />
-              </div>
-            </div>
+            <div className="space-y-6 flex-grow">
+              {/* Preis & Rabatt Row */}
+              <div className="grid grid-cols-3 gap-4">
+                <div className="col-span-2 group">
+                  <label className="block text-gray-500 text-[10px] uppercase tracking-widest font-bold mb-2 ml-1">Preis</label>
+                  <div className="relative">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">€</span>
+                    <input
+                      type="number"
+                      step="0.1"
+                      // Korrektur: Fallback auf leeren String verhindert NaN Fehler
+                      value={p.price ?? ""} 
+                      onChange={(e) => updateProduct(i, "price", e.target.value)}
+                      className="w-full bg-black/20 border border-gray-700 pl-10 pr-4 py-4 rounded-2xl text-white text-xl font-bold focus:border-blue-500 outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
+                  </div>
+                </div>
 
-            {/* SHU */}
-            <div className="my-6">
-              <label className="text-gray-400 text-xs">SHU</label>
-              <input
-                type="number"
-                value={p.hotness}
-                onChange={(e) =>
-                  updateProduct(i, "hotness", parseInt(e.target.value) || 0)
-                }
-                className="w-full bg-gray-700 px-3 py-2 rounded text-sm mt-1"
-              />
-            </div>
+                <div className="group">
+                  <label className="block text-gray-500 text-[10px] uppercase tracking-widest font-bold mb-2 text-right">Rabatt</label>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      value={p.discountPercent ?? ""}
+                      onChange={(e) => updateProduct(i, "discountPercent", e.target.value)}
+                      className="w-full bg-black/20 border border-gray-700 px-4 py-4 rounded-2xl text-white text-xl font-bold text-center focus:border-emerald-500 outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 text-xs">%</span>
+                  </div>
+                </div>
+              </div>
 
-            {/* Schärfe */}
-            <div className="my-6">
-              <label className="text-gray-400 text-xs block mb-2">
-                Schärfe
-              </label>
-              <input
-                type="range"
-                min="1"
-                max="5"
-                value={p.spiciness}
-                onChange={(e) =>
-                  updateProduct(i, "spiciness", parseInt(e.target.value))
-                }
-                className="w-full accent-red-500"
-              />
-              <div className="text-center text-lg mt-2">
-                {p.spiciness} Chili
+              {/* SHU Row */}
+              <div className="group">
+                <div className="flex justify-between mb-2">
+                  <label className="text-gray-500 text-[10px] uppercase tracking-widest font-bold">Schärfegrad (SHU)</label>
+                  <span className="text-[10px] text-orange-500 font-mono font-bold bg-orange-500/10 px-2 py-0.5 rounded-md">
+                    {p.hotness ? Number(p.hotness).toLocaleString() : "0"}
+                  </span>
+                </div>
+                <div className="relative">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xl">🔥</span>
+                  <input
+                    type="number"
+                    value={p.hotness ?? ""}
+                    onChange={(e) => updateProduct(i, "hotness", e.target.value)}
+                    className="w-full bg-black/20 border border-gray-700 pl-12 pr-4 py-4 rounded-2xl text-white text-xl font-bold focus:border-orange-500 outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  />
+                </div>
+              </div>
+
+              {/* Intensität */}
+              <div className="pt-2">
+                <div className="flex justify-between items-center mb-4">
+                   <label className="text-gray-500 text-[10px] uppercase tracking-widest font-bold">Intensität</label>
+                   <span className="text-xs font-bold text-red-500 uppercase">{p.spiciness} Chili</span>
+                </div>
+                <input
+                  type="range" min="1" max="5" value={p.spiciness}
+                  onChange={(e) => updateProduct(i, "spiciness", parseInt(e.target.value))}
+                  className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-red-500"
+                />
               </div>
             </div>
 
             <button
-              onClick={() =>
-                setProducts((prev) => prev.filter((_, idx) => idx !== i))
-              }
-              className="w-full py-2.5 bg-red-900 hover:bg-red-800 rounded-xl text-sm font-bold"
+              onClick={() => setProducts((prev) => prev.filter((_, idx) => idx !== i))}
+              className="w-full mt-8 py-4 bg-gray-900/50 hover:bg-red-950/30 hover:text-red-500 rounded-2xl text-xs font-black uppercase tracking-widest transition-all border border-transparent hover:border-red-900/50"
             >
-              Löschen
+              Produkt Löschen
             </button>
           </div>
         ))}
